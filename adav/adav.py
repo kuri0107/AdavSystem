@@ -2,8 +2,13 @@ from flask import render_template, Flask,request,Response
 import json,base64,datetime
 app = Flask(__name__)
 
-FILE_FORMAT = ".jpeg"
-FILE_PATH = "static/images/"
+# ファイルの拡張子の定義
+FILE_FORMAT_PNG = ".png"
+FILE_FORMAT_JPEG = ".jpeg"
+
+# 保存先のパス
+FILE_PATH = "static/images/capture"
+
 #トップページへの遷移
 @app.route('/')
 def top():
@@ -24,12 +29,19 @@ def capture():
 
     #ファイル名を日時にする
     date = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
-    print("日付型" + date)
-    filename = str(date) + FILE_FORMAT
-    print("ファイル名" + filename)
+    # print("日付型" + date)
 
-    with open(FILE_PATH + filename, "wb") as f:
-        f.write(base64.decodestring(getdata))
+    #JPEG
+    #filename = str(date) + FILE_FORMAT_JPEG
+
+    #PNG
+    filename = str(date) + FILE_FORMAT_PNG
+
+    # print("ファイル名" + filename)
+
+
+    # with open(FILE_PATH + filename, "wb") as f:
+    #      f.write(base64.decodestring(getdata))
 
     #TODO 分析した結果異常なデータを返す
 

@@ -46,13 +46,16 @@
                         ctx.drawImage(video, 0, 0, w, h);
 
                         //imgにjpeg形式で書き出し
-                        var base64 = this.canvas.toDataURL('image/jpeg');
+                        //var base64 = this.canvas.toDataURL('image/jpeg');
+
+                        //imgにpng形式で書き出し
+                        var base64 = this.canvas.toDataURL('image/png');
 
                         $.ajax({
                             type: 'POST',
                             url: '/capture',
                             data: base64,
-                            contentType: 'image/jpeg',
+                            contentType: 'image/png',
                             //サーバからの返送データ(json)を受け取る
                             success: function(data) {
                                 console.log("通信成功");

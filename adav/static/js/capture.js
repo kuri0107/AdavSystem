@@ -40,30 +40,30 @@
 //});
 
 //非同期通信でサーバに画像を送信し、異常があった場合表示する
-$(function() {
-  $("#exajax").click(function() {
-    reader = new FileReader()
-    var jpeg
-    reader.onload = function() {
-      jpeg = reader.result
-      $.ajax({
-        type: 'POST',
-        url: '/capture',
-        data: jpeg,
-        contentType: 'image/jpeg',
-        //サーバからの返送データ(json)を受け取る
-        success: function(data) {
-          console.log("通信成功");
-          console.log("dataの値"+data);
-          var bar_list = $.parseJSON(data);
-          //jsonの要素数分、リストに追加
-          for (var i in bar_list) {
-            console.log(bar_list[i])
-            $("img").attr("src", bar_list[i]);
-          }
-        }
-      });
-    }
-    reader.readAsDataURL($("#imgfile")[0].files[0])
-  });
-});
+//$(function() {
+//  $("#exajax").click(function() {
+//    reader = new FileReader()
+//    var jpeg
+//    reader.onload = function() {
+//      jpeg = reader.result
+//      $.ajax({
+//        type: 'POST',
+//        url: '/capture',
+//        data: jpeg,
+//        contentType: 'image/jpeg',
+//        //サーバからの返送データ(json)を受け取る
+//        success: function(data) {
+//          console.log("通信成功");
+//          console.log("dataの値"+data);
+//          var bar_list = $.parseJSON(data);
+//          //jsonの要素数分、リストに追加
+//          for (var i in bar_list) {
+//            console.log(bar_list[i])
+//            $("img").attr("src", bar_list[i]);
+//          }
+//        }
+//      });
+//    }
+//    reader.readAsDataURL($("#imgfile")[0].files[0])
+//  });
+//});
