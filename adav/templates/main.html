@@ -45,12 +45,26 @@
                         //canvasにコピー
                         ctx.drawImage(video, 0, 0, w, h);
 
-                        //imgにjpg形式で書き出し
-                        img.src = canvas.toDataURL('image/jpg');
+                        //imgにjpeg形式で書き出し
+                        var base64 = this.canvas.toDataURL('image/jpeg');
 
-                        const request = new XMLHttpRequest();
-                        request.open("GET", `https://url/${img.src}`);
-                        request.send();
+                        $.ajax({
+                            type: 'POST',
+                            url: '/capture',
+                            data: base64,
+                            contentType: 'image/jpeg',
+                            //サーバからの返送データ(json)を受け取る
+                            success: function(data) {
+                                console.log("通信成功");
+                                console.log("dataの値"+data);
+                                var bar_list = $.parseJSON(data);
+                                //jsonの要素数分、リストに追加
+                                for (var i in bar_list) {
+                                    console.log(bar_list[i])
+                                $("img").attr("src", bar_list[i]);
+                              }
+                            }
+                         });
                         }, 5000);
                     },function(err) { // for error case
                         console.log(err);
@@ -64,9 +78,12 @@
             <!-- TODO 今後のタスク -->
             <!-- TODO キャプチャした画像を表示jsで処理終了ごとに画像を追加していく -->
             <!-- TODO 左側のコンテンツを固定しスクロール可能にする -->
-            <!--     →<div style="height:100px; width:100px; overflow-x:scroll;">をセル(td)内に書く  -->
+
             <!-- TODO 詳細画像をクリックした際に新タブで詳細を表示する -->
-            <!--     →　aタグにtarget=”_blank”属性をつける -->
+
+            <td  valign="top" width="35%">
+                <img src="" >
+            </td>
         </tr>
     </table>
 

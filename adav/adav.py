@@ -21,6 +21,7 @@ def capture():
 
     #TODO 分析した結果異常があった場合サーバに画像を保存
     #TODO ファイルする保存名を日時にする
+    filename = ""
     with open("static/images/input.jpeg", "wb") as f:
         f.write(base64.decodestring(getdata))
 
