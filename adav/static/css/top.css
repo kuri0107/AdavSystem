@@ -1,0 +1,11 @@
+body {
+    background-image: url("/static/images/background.jpg");
+}
+h1 {
+    font-size: 64px;
+    color: white;
+}
+
+h2{
+    color: white;
+}

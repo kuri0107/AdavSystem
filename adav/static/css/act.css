@@ -1,0 +1,29 @@
+body {
+    background-image: url("haikei.jpg");
+}
+
+h1{
+    font-size:30px;
+    color: white;
+    position: relative;
+    left:50px;
+}
+
+img{
+    width: 800px;
+    height: 600px;
+}
+
+h2 {
+    font-size:18px;
+    color: white;
+    position: relative;
+    left:50px;
+}
+
+h3{
+    font-size:12px;
+    color: white;
+    position: relative;
+    left:50px;
+}

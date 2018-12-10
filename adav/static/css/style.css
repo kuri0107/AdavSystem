@@ -1,0 +1,11 @@
+.live{
+    float: left;
+}
+
+.heightLine{
+    float: left;
+}
+
+html,body{
+    overflow: hidden
+}

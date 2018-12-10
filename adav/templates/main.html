@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Adav</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/capture.js"></script>
+</head>
+<body>
+    <table width="100%">
+        <tr>
+
+            <!-- Webカメラの表示 -->
+            <td valign="top">
+                <video id="myVideo" width="800" height="600" autoplay="1" ></video>
+                <script type="text/javascript">
+                    //ウェブカメラで撮影
+                    //TODO htmlへのスクリプトの埋め込みは動くと思われるが、jsファイルに書き上げた場合うまく動かない
+
+                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia;
+                    window.URL = window.URL || window.webkitURL;
+
+                    var video = document.getElementById('myVideo');
+                    var localStream = null;
+                    navigator.getUserMedia({video: true, audio: false},
+                    function(stream) {
+                        console.log(stream);
+                        video.src = window.URL.createObjectURL(stream);
+                        setInterval(function() {
+                        var canvas = document.getElementById('canvas');
+
+                        //canvasの描画モードを2sに
+                        var ctx = canvas.getContext('2d');
+                        var img = document.getElementById('img');
+
+                        //videoの縦幅横幅を取得
+                        var w = video.offsetWidth;
+                        var h = video.offsetHeight;
+
+                        //同じサイズをcanvasに指定
+                        canvas.setAttribute("width", w);
+                        canvas.setAttribute("height", h);
+
+                        //canvasにコピー
+                        ctx.drawImage(video, 0, 0, w, h);
+
+                        //imgにjpg形式で書き出し
+                        img.src = canvas.toDataURL('image/jpg');
+
+                        const request = new XMLHttpRequest();
+                        request.open("GET", `https://url/${img.src}`);
+                        request.send();
+                        }, 5000);
+                    },function(err) { // for error case
+                        console.log(err);
+                    });
+                </script>
+            </td>
+
+            <!-- キャプチャした画像を表示 -->
+            <td valign="top" width="35%">
+                <canvas id="canvas"></canvas></td>
+            <!-- TODO 今後のタスク -->
+            <!-- TODO キャプチャした画像を表示jsで処理終了ごとに画像を追加していく -->
+            <!-- TODO 左側のコンテンツを固定しスクロール可能にする -->
+
+            <!-- TODO 詳細画像をクリックした際に新タブで詳細を表示する -->
+        </tr>
+    </table>
+
+    <!-- 参考リンク -->
+    <!-- https://syossan.hateblo.jp/entry/20101121/1290302431 リンク張るやつ -->
+    <!-- https://www.sejuku.net/blog/30245 ajaxのやつ -->
+    <!-- https://www.sejuku.net/blog/32532 javascriptでjsonファイルを表示するやつ -->
+
+</body>
+</html>
