@@ -46,20 +46,20 @@
                         ctx.drawImage(video, 0, 0, w, h);
 
                         //imgにjpeg形式で書き出し
-                        //var base64 = this.canvas.toDataURL('image/jpeg');
+                        var base64 = this.canvas.toDataURL('image/jpeg');
 
                         //imgにpng形式で書き出し
-                        var base64 = this.canvas.toDataURL('image/png');
+                        //var base64 = this.canvas.toDataURL('image/png');
 
                         $.ajax({
                             type: 'POST',
                             url: '/capture',
                             data: base64,
-                            contentType: 'image/png',
+                            contentType: 'image/jpeg',
                             //サーバからの返送データ(json)を受け取る
                             success: function(data) {
                                 console.log("通信成功");
-                                console.log("dataの値"+data);
+                                console.log("dataの値:"+data);
                                 var bar_list = $.parseJSON(data);
                                 //jsonの要素数分、リストに追加
                                 for (var i in bar_list) {
@@ -78,14 +78,17 @@
 
             <!-- キャプチャした画像を表示 -->
             <td valign="top" width="35%">
-                <canvas id="canvas"></canvas></td>
+
             <!-- TODO 今後のタスク -->
             <!-- TODO キャプチャした画像を表示jsで処理終了ごとに画像を追加していく -->
             <!-- TODO 左側のコンテンツを固定しスクロール可能にする -->
 
             <!-- TODO 詳細画像をクリックした際に新タブで詳細を表示する -->
 
-                <img src="" >
+                <div style="height:600px; width:800px; overflow-y:scroll;">
+                    <canvas id="canvas"></canvas>
+                    <img src="" target="_blank">
+                </div>
             </td>
         </tr>
     </table>
