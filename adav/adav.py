@@ -11,7 +11,6 @@ HEADER_IDX = 23
 START_BYTE_IDX = 2
 END_BYTE_IDX = 1
 
-
 # 保存先のパス
 FILE_PATH = "static/capture/"
 
@@ -31,7 +30,6 @@ def capture():
     # 画像データのリクエスト
     getdata = request.data
 
-
     #TODO 分析した結果、異常があった場合サーバに画像を保存
 
     # captureフォルダに保存
@@ -48,8 +46,8 @@ def capture():
 
     #TODO 分析した結果異常なデータを返す
 
-    with open(FILE_PATH + filename, "wb") as f:
-         f.write(base64.decodestring(getdata[HEADER_IDX:]))
+    # with open(FILE_PATH + filename, "wb") as f:
+    #      f.write(base64.decodestring(getdata[HEADER_IDX:]))
 
     #取得したバイナリを文字列型に変換
     #先端のb'と終端の'を取り除いて返す

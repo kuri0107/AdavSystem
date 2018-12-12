@@ -26,7 +26,12 @@
                     navigator.getUserMedia({video: true, audio: false},
                     function(stream) {
                         console.log(stream);
-                        video.src = window.URL.createObjectURL(stream);
+                        //video.src = window.URL.createObjectURL(stream);
+
+                        //createObjectURLについて
+                        //https://www.fxsitecompat.com/ja/docs/2018/url-createobjecturl-no-longer-accepts-mediastream-as-argument/
+                        
+                        video.srcObject = stream
                         setInterval(function() {
                         var canvas = document.getElementById('canvas');
 
@@ -64,7 +69,9 @@
                                 //jsonの要素数分、リストに追加
                                 for (var i in bar_list) {
                                     console.log(bar_list[i])
-                                $("img").attr("src", bar_list[i]);
+                                <!--$("img").attr("src", bar_list[i]);-->
+                                //canvasと同じ横と縦をセット
+                                $("#capture_table").append("<img src='" + bar_list[i] +"' width='400' height='300'>");
                               }
                             }
                          });
@@ -77,19 +84,22 @@
             </td>
 
             <!-- キャプチャした画像を表示 -->
-            <td valign="top" width="35%">
+            <!--<td valign="top" width="35%">-->
 
             <!-- TODO 今後のタスク -->
             <!-- TODO キャプチャした画像を表示jsで処理終了ごとに画像を追加していく -->
             <!-- TODO 左側のコンテンツを固定しスクロール可能にする -->
 
             <!-- TODO 詳細画像をクリックした際に新タブで詳細を表示する -->
+            <td id="capture_table">
+                <canvas id="canvas"></canvas>
+                <!--<div style="height:600px; width:800px; overflow-y:scroll;">-->
+                    <!--<canvas id="canvas"></canvas>-->
+                    <!--<img src="" target="_blank">-->
+                <!--</div>-->
 
-                <div style="height:600px; width:800px; overflow-y:scroll;">
-                    <canvas id="canvas"></canvas>
-                    <img src="" target="_blank">
-                </div>
             </td>
+
         </tr>
     </table>
 
