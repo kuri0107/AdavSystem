@@ -73,7 +73,6 @@ def predict(data):
     convert_type = {3:"RGB",4:"RGBA"}
 
     # 姿勢判定用モデルのロード
-    backend.clear_session()
     model = models.load_model("model/down_predict.hdf5")
     input_form = model.get_layer(index=0).get_config()["batch_input_shape"]
     # 画像を整形する
@@ -86,6 +85,7 @@ def predict(data):
     x = np.expand_dims(x, axis=0)
     # 予測させる
     features = model.predict(x)
+    backend.clear_session()
     # 予測結果による処理
     if features[0,0] == 1:
         # 異常時
