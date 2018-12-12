@@ -1,2 +1,7 @@
 -必要ライブラリ-
 Flask
+Jinja2
+tensorflow
+keras
+Pillow
+
