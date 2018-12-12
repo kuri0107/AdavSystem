@@ -30,7 +30,7 @@
 
                         //createObjectURLについて
                         //https://www.fxsitecompat.com/ja/docs/2018/url-createobjecturl-no-longer-accepts-mediastream-as-argument/
-                        
+
                         video.srcObject = stream
                         setInterval(function() {
                         var canvas = document.getElementById('canvas');
@@ -71,7 +71,7 @@
                                     console.log(bar_list[i])
                                 <!--$("img").attr("src", bar_list[i]);-->
                                 //canvasと同じ横と縦をセット
-                                $("#capture_table").append("<img src='" + bar_list[i] +"' width='400' height='300'>");
+                                $("#capture_table").append("<tr><td><img src='" + bar_list[i] +"' width='320' height='240'></tr></td>");
                               }
                             }
                          });
@@ -91,14 +91,21 @@
             <!-- TODO 左側のコンテンツを固定しスクロール可能にする -->
 
             <!-- TODO 詳細画像をクリックした際に新タブで詳細を表示する -->
-            <td id="capture_table">
-                <canvas id="canvas"></canvas>
-                <!--<div style="height:600px; width:800px; overflow-y:scroll;">-->
-                    <!--<canvas id="canvas"></canvas>-->
-                    <!--<img src="" target="_blank">-->
-                <!--</div>-->
 
-            </td>
+                <td>
+                    <div class="capture_table" style="height:576px; overflow-y:scroll; margin:10px;">
+                    <table id="capture_table">
+                        <tr><td> 表示したいテーブル</td></tr>
+                        <tr><td><canvas id="canvas" style="display:none;"></canvas></td></tr>
+                    </table>
+
+                    <!--<div style="height:600px; width:800px; overflow-y:scroll;">-->
+                        <!--<canvas id="canvas"></canvas>-->
+                        <!--<img src="" target="_blank">-->
+                    <!--</div>-->
+                        </div>
+                </td>
+
 
         </tr>
     </table>
@@ -108,5 +115,6 @@
     <!-- https://www.sejuku.net/blog/30245 ajaxのやつ -->
     <!-- https://www.sejuku.net/blog/32532 javascriptでjsonファイルを表示するやつ -->
 
+    <!-- https://matome.naver.jp/odai/2148671836139759101 動画のアスペクト比 -->
 </body>
 </html>
