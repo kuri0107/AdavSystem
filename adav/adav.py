@@ -9,6 +9,7 @@ app = Flask(__name__)
 # ファイルの拡張子の定義
 FILE_FORMAT_PNG = ".png"
 FILE_FORMAT_JPEG = ".jpeg"
+FILE_FORMAT_JSON = ".json"
 
 # JPEGイメージヘッダ部の終端座標
 HEADER_IDX = 23
@@ -16,7 +17,8 @@ START_BYTE_IDX = 2
 END_BYTE_IDX = 1
 
 # 保存先のパス
-FILE_PATH = "static/capture/"
+FILE_PATH_CAPTURE = "static/capture/"
+FILE_PATH_JSONDATA = "static/jsondata/"
 
 # トップページへの遷移
 @app.route('/')
@@ -39,28 +41,45 @@ def capture():
 
         # captureフォルダに保存
         # ファイル名を日時にする
-        date = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
+        # date = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
         # print("日付型" + date)
 
         # JPEG
-        filename = str(date) + FILE_FORMAT_JPEG
+        # filename = str(date) + FILE_FORMAT_JPEG
         # PNG
         # filename = str(date) + FILE_FORMAT_PNG
-
+        #JSON
+        date = datetime.datetime.today().strftime("%Y%m%d")
+        filename = str(date) + FILE_FORMAT_JSON
+        key = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
         # print("ファイル名" + filename)
 
         #TODO 分析した結果異常なデータを返す
 
         # with open(FILE_PATH + filename, "wb") as f:
         #      f.write(base64.decodestring(getdata[HEADER_IDX:]))
+        imageBynary = str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]
+        #TODO json形式でキー値、画像、詳細テキストを保存
+        json_data = {
+            "key": key,
+            "imageBynary": imageBynary,
+            "detail" : "詳細データ"
+        }
+        with open(FILE_PATH_JSONDATA + filename, "a") as f:
+            json.dump(json_data, f)
+            f.write(",")
 
         #取得したバイナリを文字列型に変換
         #先端のb'と終端の'を取り除いて返す
         #str(getdata) → b'XXXX...X'
         #str(getdata)[2:len(str(getdata))-1] → XXXX...X
         retdata = [str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]]
+
+
+
         #base64のバイナリデータをjson形式でレスポンスとして返す
         return Response(json.dumps(retdata))
+
     else:   # 異常ナシ
         return Response()
 
