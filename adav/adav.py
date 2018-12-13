@@ -3,7 +3,7 @@ from keras import models,backend
 from PIL import Image
 from keras.preprocessing import image
 import numpy as np
-import json,base64,datetime,io
+import json,base64,datetime,io,locale
 app = Flask(__name__)
 
 # ファイルの拡張子の定義
@@ -19,6 +19,8 @@ END_BYTE_IDX = 1
 # 保存先のパス
 FILE_PATH_CAPTURE = "static/capture/"
 FILE_PATH_JSONDATA = "static/jsondata/"
+
+locale.setlocale(locale.LC_ALL, '')
 
 # トップページへの遷移
 @app.route('/')
@@ -49,9 +51,12 @@ def capture():
         # PNG
         # filename = str(date) + FILE_FORMAT_PNG
         #JSON
-        date = datetime.datetime.today().strftime("%Y%m%d")
-        filename = str(date) + FILE_FORMAT_JSON
+        #ファイル名を設定
+        filename = datetime.datetime.today().strftime("%Y%m%d") + FILE_FORMAT_JSON
+        #キー値として日付を設定
         key = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
+        #日本語で日付を設定
+        date = datetime.datetime.today().strftime("%Y年%m月%d日%H時%M分%S秒")
         # print("ファイル名" + filename)
 
         #TODO 分析した結果異常なデータを返す
@@ -61,10 +66,11 @@ def capture():
         imageBynary = str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]
         #TODO json形式でキー値、画像、詳細テキストを保存
         json_data = {
-            "key": key,
             "imageBynary": imageBynary,
-            "detail" : "詳細データ"
+            "detail" : "詳細データ",
+            "date" : date
         }
+
         with open(FILE_PATH_JSONDATA + filename, "a") as f:
             json.dump(json_data, f)
             f.write(",")
@@ -82,17 +88,6 @@ def capture():
 
     else:   # 異常ナシ
         return Response()
-
-#詳細表示
-#@app.route('/act',methods=['POST'])
-#def details():
-    return render_template("act.html")
-    # getdata = request.data
-    #
-    # retdata = {
-    #         "image" : str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX],
-    #         "key" : aaaa
-    #     }
 
 def predict(data):
     """
