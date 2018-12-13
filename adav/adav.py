@@ -83,6 +83,17 @@ def capture():
     else:   # 異常ナシ
         return Response()
 
+#詳細表示
+#@app.route('/act',methods=['POST'])
+#def details():
+    return render_template("act.html")
+    # getdata = request.data
+    #
+    # retdata = {
+    #         "image" : str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX],
+    #         "key" : aaaa
+    #     }
+
 def predict(data):
     """
     データの異常有無を予測する。
