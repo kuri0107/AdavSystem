@@ -92,7 +92,7 @@ def capture():
         #先端のb'と終端の'を取り除いて返す
         #str(getdata) → b'XXXX...X'
         #str(getdata)[2:len(str(getdata))-1] → XXXX...X
-        retdata = [str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]]
+        retdata = [str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX],key]
 
         #base64のバイナリデータをjson形式でレスポンスとして返す
         return Response(json.dumps(retdata))

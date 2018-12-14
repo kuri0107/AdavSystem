@@ -72,13 +72,14 @@
                                 console.log("dataの値:"+data);
                                 var bar_list = $.parseJSON(data);
                                 //jsonの要素数分、リストに追加
-                                for (var i in bar_list) {
-                                    console.log(bar_list[i])
+                                //for (var i in bar_list) {
+                                //    console.log(bar_list[i])
                                 //canvasと同じ横と縦をセット
-                                var html= "<tr><td><form action='/act' method='post' target='_blank'><input type='image' src='" + bar_list[i] + "' width='320' height='240'></form></td></tr>";
+                                var html= "<tr><td><form action='/act' method='post' target='_blank'><input type='image' src='" + bar_list[0] + "' width='320' height='240' value='"+ bar_list[1] + "'></form></td></tr>";
                                 $("#capture_table").append(html);
+                                console.log("キーの値"+bar_list[1]);
 
-                              }
+                              //}
                             }
                          });
                         }, 5000);
