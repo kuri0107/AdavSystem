@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <!-- 参考リンク -->
+    <!-- https://syossan.hateblo.jp/entry/20101121/1290302431 リンク張るやつ -->
+    <!-- https://www.sejuku.net/blog/30245 ajaxのやつ -->
+    <!-- https://www.sejuku.net/blog/32532 javascriptでjsonファイルを表示するやつ -->
+    <!-- https://matome.naver.jp/odai/2148671836139759101 動画のアスペクト比 -->
     <meta charset="UTF-8">
     <title>Adav</title>
     <link rel="stylesheet" href="/static/css/main.css">
@@ -8,10 +13,8 @@
     <script src="/static/js/capture.js"></script>
 </head>
 <body>
-    <form action="/act" method="post" target="_blank" >
     <table width="100%">
         <tr>
-
             <!-- Webカメラの表示 -->
             <td valign="top">
                 <video id="myVideo" width="800" height="600" autoplay="1" ></video>
@@ -62,6 +65,7 @@
                             url: '/capture',
                             data: base64,
                             contentType: 'image/jpeg',
+
                             //サーバからの返送データ(json)を受け取る
                             success: function(data) {
                                 console.log("通信成功");
@@ -70,9 +74,10 @@
                                 //jsonの要素数分、リストに追加
                                 for (var i in bar_list) {
                                     console.log(bar_list[i])
-                                <!--$("img").attr("src", bar_list[i]);-->
                                 //canvasと同じ横と縦をセット
-                                $("#capture_table").append("<tr><td value="i"><a href="#" onclick="submit();return false;"><img src='" + bar_list[i] + "'></a></td></tr>");
+                                var html= "<tr><td><form action='/act' method='post' target='_blank'><input type='image' src='" + bar_list[i] + "' width='320' height='240'></form></td></tr>";
+                                $("#capture_table").append(html);
+
                               }
                             }
                          });
@@ -88,38 +93,17 @@
             <!--<td valign="top" width="35%">-->
 
             <!-- TODO 今後のタスク -->
-            <!-- TODO キャプチャした画像を表示jsで処理終了ごとに画像を追加していく -->
-            <!-- TODO 左側のコンテンツを固定しスクロール可能にする -->
-
             <!-- TODO 詳細画像をクリックした際に新タブで詳細を表示する -->
-
                 <td>
                     <div class="capture_table" style="height:576px; overflow-y:scroll; margin:10px;">
-
-                            <table id="capture_table">
-
-                                    <tr><td><canvas id="canvas" style="display:none;"></canvas></td></tr>
-
-                            </table>
-
-                            <!--<div style="height:600px; width:800px; overflow-y:scroll;">-->
-                                <!--<canvas id="canvas"></canvas>-->
-                                <!--<img src="" target="_blank">-->
-                            <!--</div>-->
-
+                        <table id="capture_table">
+                            <tr><td><canvas id="canvas" style="display:none;"></canvas></td></tr>
+                        </table>
                     </div>
                 </td>
 
 
         </tr>
     </table>
-
-    <!-- 参考リンク -->
-    <!-- https://syossan.hateblo.jp/entry/20101121/1290302431 リンク張るやつ -->
-    <!-- https://www.sejuku.net/blog/30245 ajaxのやつ -->
-    <!-- https://www.sejuku.net/blog/32532 javascriptでjsonファイルを表示するやつ -->
-
-    <!-- https://matome.naver.jp/odai/2148671836139759101 動画のアスペクト比 -->
-    </form>
 </body>
 </html>

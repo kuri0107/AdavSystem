@@ -34,7 +34,8 @@ def capture():
     # 画像データのリクエスト
     getdata = request.data
 
-    if predict(getdata):    # 異常アリ
+    # if predict(getdata):    # 異常アリ
+    if True:
         #TODO 分析した結果、異常があった場合サーバに画像を保存
 
         # captureフォルダに保存
@@ -60,6 +61,7 @@ def capture():
         #str(getdata)[2:len(str(getdata))-1] → XXXX...X
         retdata = [str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]]
         #base64のバイナリデータをjson形式でレスポンスとして返す
+        print("問題あり")
         return Response(json.dumps(retdata))
     else:   # 異常ナシ
         return Response()
@@ -67,8 +69,8 @@ def capture():
 #詳細表示
 @app.route('/act',methods=['POST'])
 def details():
-    html = 'act.html'.format("niti","/static/images/startbutton.png","syousa")
-    return render_template(html)
+    html = 'act.html'.format("日時を入れる","画像データ","詳細テキストを入れる")
+    return render_template("top.html")
     # getdata = request.data
     #
     # retdata = {
