@@ -3,12 +3,13 @@ from keras import models,backend
 from PIL import Image
 from keras.preprocessing import image
 import numpy as np
-import json,base64,datetime,io
+import json,base64,datetime,io,locale,os
 app = Flask(__name__)
 
 # ファイルの拡張子の定義
 FILE_FORMAT_PNG = ".png"
 FILE_FORMAT_JPEG = ".jpeg"
+FILE_FORMAT_JSON = ".json"
 
 # JPEGイメージヘッダ部の終端座標
 HEADER_IDX = 23
@@ -16,7 +17,10 @@ START_BYTE_IDX = 2
 END_BYTE_IDX = 1
 
 # 保存先のパス
-FILE_PATH = "static/capture/"
+FILE_PATH_CAPTURE = "static/capture/"
+FILE_PATH_JSONDATA = "static/jsondata/"
+
+locale.setlocale(locale.LC_ALL, '')
 
 # トップページへの遷移
 @app.route('/')
@@ -34,34 +38,63 @@ def capture():
     # 画像データのリクエスト
     getdata = request.data
 
-    # if predict(getdata):    # 異常アリ
-    if True:
+    if predict(getdata):    # 異常アリ
         #TODO 分析した結果、異常があった場合サーバに画像を保存
 
         # captureフォルダに保存
         # ファイル名を日時にする
-        date = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
-        # print("日付型" + date)
+        # date = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
 
         # JPEG
-        filename = str(date) + FILE_FORMAT_JPEG
+        # filename = str(date) + FILE_FORMAT_JPEG
+
         # PNG
         # filename = str(date) + FILE_FORMAT_PNG
 
-        # print("ファイル名" + filename)
-
-        #TODO 分析した結果異常なデータを返す
+        #JSON
+        filename = datetime.datetime.today().strftime("%Y%m%d") + FILE_FORMAT_JSON
+        #キー値として日付を設定
+        key = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
+        #日本語で日付を設定
+        date = datetime.datetime.today().strftime("%Y年%m月%d日%H時%M分%S秒")
 
         # with open(FILE_PATH + filename, "wb") as f:
         #      f.write(base64.decodestring(getdata[HEADER_IDX:]))
+
+        imageBynary = str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]
+
+        #jsonファイルに書き込み
+        if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在するかどうか
+            with open(FILE_PATH_JSONDATA + filename, "r") as f:
+                read_json = json.load(f)
+                print("読み込み成功:")
+                read_json[key] = {
+                    "imageBynary": imageBynary,
+                    "detail" : "詳細データ",
+                    "date" : date
+                }
+            with open(FILE_PATH_JSONDATA + filename, "w") as f:
+                json.dump(read_json,f)
+                print("書き込み完了")
+        else:   #ファイルが存在しない場合新規作成
+            with open(FILE_PATH_JSONDATA + filename, "w") as f:
+                json_data = {
+                    key:{
+                        "imageBynary": imageBynary,
+                        "detail" : "詳細データ",
+                        "date" : date
+                    }
+                }
+                json.dump(json_data,f)
+                print("新規で書き込み完了")
 
         #取得したバイナリを文字列型に変換
         #先端のb'と終端の'を取り除いて返す
         #str(getdata) → b'XXXX...X'
         #str(getdata)[2:len(str(getdata))-1] → XXXX...X
         retdata = [str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]]
+
         #base64のバイナリデータをjson形式でレスポンスとして返す
-        print("問題あり")
         return Response(json.dumps(retdata))
     else:   # 異常ナシ
         return Response()
