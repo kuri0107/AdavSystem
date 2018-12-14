@@ -65,9 +65,10 @@ def capture():
         return Response()
 
 #詳細表示
-#@app.route('/act',methods=['POST'])
-#def details():
-    return render_template("act.html")
+@app.route('/act',methods=['POST'])
+def details():
+    html = 'act.html'.format("niti","/static/images/startbutton.png","syousa")
+    return render_template(html)
     # getdata = request.data
     #
     # retdata = {
