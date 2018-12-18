@@ -66,6 +66,7 @@ def capture():
         #TODO 書き込み失敗時の処理
         #jsonファイルに書き込み
         if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在する場合
+            # try:
             with open(FILE_PATH_JSONDATA + filename, "r") as f:
                 read_json = json.load(f)
                 print("読み込み成功:")
@@ -77,6 +78,19 @@ def capture():
             with open(FILE_PATH_JSONDATA + filename, "w") as f:
                 json.dump(read_json,f)
                 print("書き込み完了")
+            # except:
+            with open(FILE_PATH_JSONDATA+ filename, "w") as f:
+                json_data = {
+                    key:{
+                        "imageBynary": imageBynary,
+                        "detail" : "詳細データ",
+                        "date" : date
+                    }
+                }
+                json.dump(json_data,f)
+            print("ファイルに問題があるため、新規作成します。")
+                # pass
+
         else:   #ファイルが存在しない場合新規作成
             with open(FILE_PATH_JSONDATA + filename, "w") as f:
                 json_data = {
