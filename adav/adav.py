@@ -1,5 +1,3 @@
-import cgi
-
 from flask import render_template, Flask,request,Response
 from keras import models,backend
 from PIL import Image
@@ -28,6 +26,7 @@ graph = tensorflow.get_default_graph()
 down_model = models.load_model("model/down_predict.hdf5")
 #blade_model = models.load_model("model/blade_predict.hdf5")
 
+#日付を日本語で入れるのに必要
 locale.setlocale(locale.LC_ALL, '')
 
 # トップページへの遷移
@@ -47,7 +46,6 @@ def capture():
     getdata = request.data
 
     if predict(getdata):    # 異常アリ
-        #TODO 分析した結果、異常があった場合サーバに画像を保存
 
         # captureフォルダに保存
         # ファイル名を日時にする
@@ -71,8 +69,11 @@ def capture():
 
         imageBynary = str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]
 
+        #TODO 読み込み失敗時の処理
+        #TODO 書き込み失敗時の処理
         #jsonファイルに書き込み
-        if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在するかどうか
+        if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在する場合
+            # try:
             with open(FILE_PATH_JSONDATA + filename, "r") as f:
                 read_json = json.load(f)
                 print("読み込み成功:")
@@ -84,6 +85,19 @@ def capture():
             with open(FILE_PATH_JSONDATA + filename, "w") as f:
                 json.dump(read_json,f)
                 print("書き込み完了")
+            # except:
+            # with open(FILE_PATH_JSONDATA+ filename, "w") as f:
+            #     json_data = {
+            #         key:{
+            #             "imageBynary": imageBynary,
+            #             "detail" : "詳細データ",
+            #             "date" : date
+            #         }
+            #     }
+            #     json.dump(json_data,f)
+            # print("ファイルに問題があるため、新規作成します。")
+            # pass
+
         else:   #ファイルが存在しない場合新規作成
             with open(FILE_PATH_JSONDATA + filename, "w") as f:
                 json_data = {
@@ -95,17 +109,23 @@ def capture():
                 }
                 json.dump(json_data,f)
                 print("新規で書き込み完了")
-
-        #取得したバイナリを文字列型に変換
-        #先端のb'と終端の'を取り除いて返す
-        #str(getdata) → b'XXXX...X'
-        #str(getdata)[2:len(str(getdata))-1] → XXXX...X
-        retdata = [str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX],key]
-        print("帰り値キー確認:" + retdata[1])
+        retdata = [cnvString(getdata),key]
         #base64のバイナリデータをjson形式でレスポンスとして返す
         return Response(json.dumps(retdata))
     else:   # 異常ナシ
-        return Response()
+        return Response(None)
+
+def cnvString(bynary):
+    """
+    バイナリ型を文字列型に変換
+    先端のb'と終端の'を取り除いて返す
+    str(getdata) → b'XXXX...X'
+    str(getdata)[2:len(str(getdata))-1] → XXXX...X
+    :param bynary:
+    :return: string
+    """
+    s_bynary = str(bynary)
+    return s_bynary[START_BYTE_IDX:len(s_bynary)-END_BYTE_IDX]
 
 #詳細表示
 @app.route('/act',methods=['POST',"GET"])
