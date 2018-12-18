@@ -1,3 +1,5 @@
+import cgi
+
 from flask import render_template, Flask,request,Response
 from keras import models,backend
 from PIL import Image
@@ -93,23 +95,42 @@ def capture():
         #str(getdata) → b'XXXX...X'
         #str(getdata)[2:len(str(getdata))-1] → XXXX...X
         retdata = [str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX],key]
-
+        print("帰り値キー確認:" + retdata[1])
         #base64のバイナリデータをjson形式でレスポンスとして返す
         return Response(json.dumps(retdata))
     else:   # 異常ナシ
         return Response()
 
 #詳細表示
-@app.route('/act',methods=['POST'])
+@app.route('/act',methods=['POST',"GET"])
 def details():
-    html = 'act.html'.format("日時を入れる","画像データ","詳細テキストを入れる")
-    return render_template("top.html")
-    # getdata = request.data
-    #
-    # retdata = {
-    #         "image" : str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX],
-    #         "key" : aaaa
-    #     }
+    # form = cgi.FieldStorage()
+    # key = form["key"].value
+    key = str(str(request.query_string))[START_BYTE_IDX:len(str(str(request.query_string)))-END_BYTE_IDX]
+    #key = form.getvalue('im')
+    print(type(key))
+    print(key)
+
+    filename = datetime.datetime.today().strftime("%Y%m%d") + FILE_FORMAT_JSON
+
+    if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在するかどうか
+            with open(FILE_PATH_JSONDATA + filename, "r") as f:
+                read_json = json.load(f)
+                #html = 'act.html'.format(read_json[key].date,read_json[key].imageBynary,read_json[key].detail)
+                # print(type(html))
+                f.close()
+
+                zi = read_json[key]
+
+                #img_binarystream = io.BytesIO(zi["imageBynary"].encode('utf-8'))
+
+                #PILイメージ <- バイナリーストリーム
+                #img_pil = Image.open(img_binarystream)
+            return render_template("act.html",a=zi["date"],b=zi["imageBynary"],c=zi["detail"])#,a=read_json[key].date,b=read_json[key].imageBynary,c=read_json[key].detail)
+    else:
+        print("error:ファイルが存在しません")
+
+    return None
 
 def predict(data):
     """

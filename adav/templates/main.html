@@ -11,6 +11,13 @@
     <link rel="stylesheet" href="/static/css/main.css">
     <script src="/static/js/jquery-3.3.1.min.js"></script>
     <script src="/static/js/capture.js"></script>
+    <!--<script>-->
+        <!--function sub(myform) {-->
+
+            <!--document.myform.submit();-->
+
+        <!--};-->
+    <!--</script>-->
 </head>
 <body>
     <table width="100%">
@@ -73,9 +80,11 @@
                                 var bar_list = $.parseJSON(data);
                                 //jsonの要素数分、リストに追加
                                 //for (var i in bar_list) {
-                                //    console.log(bar_list[i])
+                                console.log(bar_list)
+                                console.log(bar_list[1])
                                 //canvasと同じ横と縦をセット
-                                var html= "<tr><td><form action='/act' method='post' target='_blank'><input type='image' src='" + bar_list[0] + "' width='320' height='240' value='"+ bar_list[1] + "'></form></td></tr>";
+                                //var html= "<tr><td><form action='/act' method='post' target='_blank' name='"+ bar_list[1] +"'><input type='image' src='" + bar_list[0] + "' width='320' height='240' onclick='sub("+bar_list[1]+")' name='im' value='"+ bar_list[1] + "'></form></td></tr>";
+                                var html = "<tr><td><a href='/act?" + bar_list[1] + "'><img src='" + bar_list[0] +"' width='320' height='240'></a></td></tr>";
                                 $("#capture_table").append(html);
                                 console.log("キーの値"+bar_list[1]);
 
