@@ -88,17 +88,23 @@ def capture():
                 }
                 json.dump(json_data,f)
                 print("新規で書き込み完了")
-
-        #取得したバイナリを文字列型に変換
-        #先端のb'と終端の'を取り除いて返す
-        #str(getdata) → b'XXXX...X'
-        #str(getdata)[2:len(str(getdata))-1] → XXXX...X
-        retdata = [str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX],key]
-
+        retdata = [cnvString(getdata),key]
         #base64のバイナリデータをjson形式でレスポンスとして返す
         return Response(json.dumps(retdata))
     else:   # 異常ナシ
         return Response(None)
+
+def cnvString(bynary):
+    """
+    バイナリ型を文字列型に変換
+    先端のb'と終端の'を取り除いて返す
+    str(getdata) → b'XXXX...X'
+    str(getdata)[2:len(str(getdata))-1] → XXXX...X
+    :param bynary:
+    :return: string
+    """
+    s_bynary = str(bynary)
+    return s_bynary[START_BYTE_IDX:len(s_bynary)-END_BYTE_IDX]
 
 #詳細表示
 @app.route('/act',methods=['POST'])
@@ -139,3 +145,4 @@ def predict(data):
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8080, debug=True)
+
