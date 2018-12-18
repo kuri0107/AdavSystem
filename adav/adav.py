@@ -26,7 +26,7 @@ FILE_PATH_JSONDATA = "static/jsondata/"
 # モデル準備
 graph = tensorflow.get_default_graph()
 down_model = models.load_model("model/down_predict.hdf5")
-blade_model = models.load_model("model/blade_predict.hdf5")
+#blade_model = models.load_model("model/blade_predict.hdf5")
 
 locale.setlocale(locale.LC_ALL, '')
 
