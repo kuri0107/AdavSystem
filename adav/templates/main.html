@@ -72,16 +72,19 @@
                             success: function(data) {
                                 console.log("通信成功");
                                 console.log("dataの値:"+data);
+                                if(data !== ""){
                                 var bar_list = $.parseJSON(data);
-                                //jsonの要素数分、リストに追加
-                                //for (var i in bar_list) {
-                                //    console.log(bar_list[i])
-                                //canvasと同じ横と縦をセット
-                                var html= "<tr id='capture'><td><form action='/act' method='post' target='_blank'><input type='image' src='" + bar_list[0] + "' width='320' height='240' value='"+ bar_list[1] + "'></form></td></tr>";
-                                $("#capture_table").append(html);
-                                console.log("キーの値"+bar_list[1]);
+                                    //jsonの要素数分、リストに追加
+                                    //for (var i in bar_list) {
+                                    //    console.log(bar_list[i])
+                                    //canvasと同じ横と縦をセット
+                                    var html= "<tr id='capture'><td><form action='/act' method='post' target='_blank'><input type='image' src='" + bar_list[0] + "' width='320' height='240' value='"+ bar_list[1] + "'></form></td></tr>";
+                                    $("#capture_table").append(html);
+                                    console.log("キーの値"+bar_list[1]);
 
-                              //}
+                                }else{
+                                console.log("判定の結果正常です。");
+                                }
                             }
                          });
                         }, 5000);
@@ -98,10 +101,10 @@
             <!-- TODO 今後のタスク -->
             <!-- TODO 詳細画像をクリックした際に新タブで詳細を表示する -->
                 <td>
-                    <div class="capture_table" style="height:576px; overflow-y:scroll; margin:10px;">
+                    <div>
                         <table id="capture_table">
-                            <tr><td><button style="width:320px;">画像をリフレッシュ</button></td></tr>
-                            <tr><td><canvas id="canvas" style="display:none;"></canvas></td></tr>
+                            <tr><td><button>画像をリフレッシュ</button></td></tr>
+                            <tr><td><canvas id="canvas"></canvas></td></tr>
                         </table>
                     </div>
                 </td>

@@ -39,7 +39,6 @@ def capture():
     getdata = request.data
 
     if predict(getdata):    # 異常アリ
-        #TODO 分析した結果、異常があった場合サーバに画像を保存
 
         # captureフォルダに保存
         # ファイル名を日時にする
@@ -63,8 +62,10 @@ def capture():
 
         imageBynary = str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]
 
+        #TODO 読み込み失敗時の処理
+        #TODO 書き込み失敗時の処理
         #jsonファイルに書き込み
-        if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在するかどうか
+        if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在する場合
             with open(FILE_PATH_JSONDATA + filename, "r") as f:
                 read_json = json.load(f)
                 print("読み込み成功:")
@@ -97,19 +98,14 @@ def capture():
         #base64のバイナリデータをjson形式でレスポンスとして返す
         return Response(json.dumps(retdata))
     else:   # 異常ナシ
-        return Response()
+        return Response(None)
 
 #詳細表示
 @app.route('/act',methods=['POST'])
 def details():
-    html = 'act.html'.format("日時を入れる","画像データ","詳細テキストを入れる")
+    html = 'act.html'
     return render_template("top.html")
-    # getdata = request.data
-    #
-    # retdata = {
-    #         "image" : str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX],
-    #         "key" : aaaa
-    #     }
+
 
 def predict(data):
     """
