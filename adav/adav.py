@@ -24,8 +24,9 @@ FILE_PATH_JSONDATA = "static/jsondata/"
 # モデル準備
 graph = tensorflow.get_default_graph()
 down_model = models.load_model("model/down_predict.hdf5")
-blade_model = models.load_model("model/blade_predict.hdf5")
+#blade_model = models.load_model("model/blade_predict.hdf5")
 
+#日付を日本語で入れるのに必要
 locale.setlocale(locale.LC_ALL, '')
 
 # トップページへの遷移
@@ -85,17 +86,17 @@ def capture():
                 json.dump(read_json,f)
                 print("書き込み完了")
             # except:
-            with open(FILE_PATH_JSONDATA+ filename, "w") as f:
-                json_data = {
-                    key:{
-                        "imageBynary": imageBynary,
-                        "detail" : "詳細データ",
-                        "date" : date
-                    }
-                }
-                json.dump(json_data,f)
-            print("ファイルに問題があるため、新規作成します。")
-                # pass
+            # with open(FILE_PATH_JSONDATA+ filename, "w") as f:
+            #     json_data = {
+            #         key:{
+            #             "imageBynary": imageBynary,
+            #             "detail" : "詳細データ",
+            #             "date" : date
+            #         }
+            #     }
+            #     json.dump(json_data,f)
+            # print("ファイルに問題があるため、新規作成します。")
+            # pass
 
         else:   #ファイルが存在しない場合新規作成
             with open(FILE_PATH_JSONDATA + filename, "w") as f:
