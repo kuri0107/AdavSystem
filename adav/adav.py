@@ -2,6 +2,7 @@ from flask import render_template, Flask,request,Response
 from keras import models,backend
 from PIL import Image
 from keras.preprocessing import image
+import tensorflow
 import numpy as np
 import json,base64,datetime,io,locale,os
 app = Flask(__name__)
@@ -19,6 +20,11 @@ END_BYTE_IDX = 1
 # 保存先のパス
 FILE_PATH_CAPTURE = "static/capture/"
 FILE_PATH_JSONDATA = "static/jsondata/"
+
+# モデル準備
+graph = tensorflow.get_default_graph()
+down_model = models.load_model("model/down_predict.hdf5")
+blade_model = models.load_model("model/blade_predict.hdf5")
 
 locale.setlocale(locale.LC_ALL, '')
 
@@ -121,42 +127,63 @@ def cnvString(bynary):
     return s_bynary[START_BYTE_IDX:len(s_bynary)-END_BYTE_IDX]
 
 #詳細表示
-@app.route('/act',methods=['POST'])
+@app.route('/act',methods=['POST',"GET"])
 def details():
-    html = 'act.html'
-    return render_template("top.html")
+    # form = cgi.FieldStorage()
+    # key = form["key"].value
+    key = str(str(request.query_string))[START_BYTE_IDX:len(str(str(request.query_string)))-END_BYTE_IDX]
+    #key = form.getvalue('im')
+    print(type(key))
+    print(key)
 
+    filename = datetime.datetime.today().strftime("%Y%m%d") + FILE_FORMAT_JSON
+
+    if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在するかどうか
+            with open(FILE_PATH_JSONDATA + filename, "r") as f:
+                read_json = json.load(f)
+                #html = 'act.html'.format(read_json[key].date,read_json[key].imageBynary,read_json[key].detail)
+                # print(type(html))
+                f.close()
+
+                zi = read_json[key]
+
+                #img_binarystream = io.BytesIO(zi["imageBynary"].encode('utf-8'))
+
+                #PILイメージ <- バイナリーストリーム
+                #img_pil = Image.open(img_binarystream)
+            return render_template("act.html",a=zi["date"],b=zi["imageBynary"],c=zi["detail"])#,a=read_json[key].date,b=read_json[key].imageBynary,c=read_json[key].detail)
+    else:
+        print("error:ファイルが存在しません")
+
+    return None
 
 def predict(data):
     """
     データの異常有無を予測する。
     異常がある場合 True ,無い場合 False を返す
     """
-    # 画像整形種別の定義
-    convert_type = {3:"RGB",4:"RGBA"}
+    global graph
+    with graph.as_default():
+        # 画像整形種別の定義
+        convert_type = {3:"RGB",4:"RGBA"}
 
-    # 姿勢判定用モデルのロード
-    model = models.load_model("model/down_predict.hdf5")
-    input_form = model.get_layer(index=0).get_config()["batch_input_shape"]
-    # 画像を整形する
-    img_buf = io.BytesIO(base64.decodestring(data[HEADER_IDX:]))
-    img = Image.open(img_buf)
-    img = img.convert(convert_type[input_form[3]])
-    img = img.resize(input_form[1:3])
-    # 画像をnumpy配列にする
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    # 予測させる
-    features = model.predict(x)
-    backend.clear_session()
-    # 予測結果による処理
-    if features[0,0] == 1:
-        # 異常時
-        return True
-    else:
-        # 正常時・予測不能時
-        return False
+        # 姿勢判定用モデルの入力形式取得
+        down_input_form = down_model.get_layer(index=0).get_config()["batch_input_shape"]
+        # 画像を整形する
+        img_buf = io.BytesIO(base64.decodestring(data[HEADER_IDX:]))
+        img = Image.open(img_buf)
+        img = img.convert(convert_type[down_input_form[3]])
+        img = img.resize(down_input_form[1:3])
+        # 画像をnumpy配列にする
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        # 予測させる
+        features = down_model.predict(x)
+        if features[0,0] == 1:
+            return True
+        else:
+            # 正常時・予測不能時
+            return False
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8080, debug=True)
-
