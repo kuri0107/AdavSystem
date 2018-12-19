@@ -9,21 +9,18 @@
     <table width="100%">
 
         <tr>
-            <td>
+            <td width="600">
                 <h1>日時  {{ a }}</h1>
             </td>
-        </tr>
-
-        <tr>
-            <td>
-                <img src="{{ b }}" >
+            <td width="400">
+                <h2>説明</h2>
+                <h3>{{ c|safe }}</h3>
             </td>
         </tr>
 
         <tr>
-            <td>
-                <h2>説明</h2>
-                <h3>{{ c }}</h3>
+            <td width="600">
+                <img src="{{ b }}" >
             </td>
         </tr>
 
