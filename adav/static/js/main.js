@@ -63,7 +63,8 @@ $(function(){
                     //canvasと同じ横と縦をセット
                     //var html= "<tr id='capture'><td><form action='/act' method='post' target='_blank'><input type='image' src='" + bar_list[0] + "' width='320' height='240' value='"+ bar_list[1] + "'></form></td></tr>";
                     var html = "<tr id='capture'><td><a href='/act?" + bar_list[1] + "' target='_blank'><img src='" + bar_list[0] +"' width='320' height='240'></a></td></tr>";
-                    $("#capture_table").append(html);
+                    //$("#capture_table").append(html);
+                    $("#capture_table:first").after(html);
                     console.log("キーの値"+bar_list[1]);
                 }else{
                     console.log("判定の結果正常です。");
