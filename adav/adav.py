@@ -18,7 +18,7 @@ START_BYTE_IDX = 2
 END_BYTE_IDX = 1
 
 # 保存先のパス
-FILE_PATH_CAPTURE = "static/capture/"
+FILE_PATH_IMAGES = "static/capture/"
 FILE_PATH_JSONDATA = "static/jsondata/"
 
 # モデル準備
@@ -46,28 +46,23 @@ def capture():
     getdata = request.data
 
     if predict(getdata):    # 異常アリ
+        #ファイル名を設定
+        #filename = createFileName(FILE_FORMAT_JPEG) #JPEGで保存
+        #filename = createFileName(FILE_FORMAT_PNG) #PNGで保存
+        filename = createFileName(FILE_FORMAT_JSON) #JSONで保存
 
-        # captureフォルダに保存
-        # ファイル名を日時にする
-        # date = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
-
-        # JPEG
-        # filename = str(date) + FILE_FORMAT_JPEG
-
-        # PNG
-        # filename = str(date) + FILE_FORMAT_PNG
-
-        #JSON
-        filename = datetime.datetime.today().strftime("%Y%m%d") + FILE_FORMAT_JSON
         #キー値として日付を設定
         key = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
+
         #日本語で日付を設定
         date = datetime.datetime.today().strftime("%Y年%m月%d日%H時%M分%S秒")
 
-        # with open(FILE_PATH + filename, "wb") as f:
+        #ヘッダ部を取り除き、画像を保存
+        # with open(FILE_PATH_IMAGES + filename, "wb") as f:
         #      f.write(base64.decodestring(getdata[HEADER_IDX:]))
 
-        imageBynary = str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]
+        #imageBynary = str(getdata)[START_BYTE_IDX:len(str(getdata))-END_BYTE_IDX]
+        imageBynary = cnvString(getdata)
 
         #TODO 読み込み失敗時の処理
         #TODO 書き込み失敗時の処理
@@ -115,18 +110,6 @@ def capture():
     else:   # 異常ナシ
         return Response(None)
 
-def cnvString(bynary):
-    """
-    バイナリ型を文字列型に変換
-    先端のb'と終端の'を取り除いて返す
-    str(getdata) → b'XXXX...X'
-    str(getdata)[2:len(str(getdata))-1] → XXXX...X
-    :param bynary:
-    :return: string
-    """
-    s_bynary = str(bynary)
-    return s_bynary[START_BYTE_IDX:len(s_bynary)-END_BYTE_IDX]
-
 #詳細表示
 @app.route('/act',methods=['POST',"GET"])
 def details():
@@ -155,7 +138,11 @@ def details():
             return render_template("act.html",a=zi["date"],b=zi["imageBynary"],c=zi["detail"])#,a=read_json[key].date,b=read_json[key].imageBynary,c=read_json[key].detail)
     else:
         print("error:ファイルが存在しません")
+    return None
 
+#TODO 一覧表示
+@app.route('/list')
+def list():
     return None
 
 def predict(data):
@@ -185,6 +172,26 @@ def predict(data):
         else:
             # 正常時・予測不能時
             return False
+
+def cnvString(bynary):
+    """
+    バイナリ型を文字列型に変換
+    先端のb'と終端の'を取り除いて返す
+    str(getdata) → b'XXXX...X'
+    str(getdata)[2:len(str(getdata))-1] → XXXX...X
+    :param bynary:
+    :return: string
+    """
+    s_bynary = str(bynary)
+    return s_bynary[START_BYTE_IDX:len(s_bynary)-END_BYTE_IDX]
+
+def createFileName(fileformat):
+    """
+    今日の日付でファイル名を設定する。
+    :param fileformat: ファイル形式
+    :return:ファイル名
+    """
+    return datetime.datetime.today().strftime("%Y%m%d") + fileformat
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8080, debug=True)
