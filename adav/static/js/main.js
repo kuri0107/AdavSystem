@@ -56,16 +56,23 @@ $(function(){
                 console.log("通信成功");
                 console.log("dataの値:"+data);
                 if(data !== ""){
-                    var bar_list = $.parseJSON(data);
-                    //jsonの要素数分、リストに追加
+                    console.log("異常を検知");
+
+                    var bar_list = $.parseJSON(data);   //jsonの要素数分、リストに追加
+                    //リストの内容確認用
                     //for (var i in bar_list) {
-                    //console.log(bar_list[i])
+                    //    console.log(bar_list[i]);
+                    //}
+                    console.log("画像データ:"+bar_list[0]);
+                    console.log("キーの値:"+bar_list[1]);
                     //canvasと同じ横と縦をセット
                     //var html= "<tr id='capture'><td><form action='/act' method='post' target='_blank'><input type='image' src='" + bar_list[0] + "' width='320' height='240' value='"+ bar_list[1] + "'></form></td></tr>";
-                    var html = "<tr id='capture'><td><a href='/act?" + bar_list[1] + "' target='_blank'><img src='" + bar_list[0] +"' width='320' height='240'></a></td></tr>";
+                    var html = "<tr id='capture'><td class='css3gallery'><a href='/act?" + bar_list[1] + "' target='_blank'><img src='" + bar_list[0] +"' width='320' height='240' title='" + bar_list[1] + "'></a></td></tr>";
+
                     //$("#capture_table").append(html);
+                    //キャプチャ画像を埋め込み
                     $("#capture_table:first").after(html);
-                    console.log("キーの値"+bar_list[1]);
+
                 }else{
                     console.log("判定の結果正常です。");
                 }

@@ -115,12 +115,16 @@ def capture():
 def details():
     # form = cgi.FieldStorage()
     # key = form["key"].value
-    key = str(str(request.query_string))[START_BYTE_IDX:len(str(str(request.query_string)))-END_BYTE_IDX]
+    #key = str(str(request.query_string))[START_BYTE_IDX:len(str(str(request.query_string)))-END_BYTE_IDX]
     #key = form.getvalue('im')
+    key = request.query_string.decode()
     print(type(key))
     print(key)
 
-    filename = datetime.datetime.today().strftime("%Y%m%d") + FILE_FORMAT_JSON
+    #今日のファイル名を探している
+    #filename = datetime.datetime.today().strftime("%Y%m%d") + FILE_FORMAT_JSON
+    filename = key[:8] + FILE_FORMAT_JSON   #keyの日付のファイル名を設定
+    print("ファイル名:"+filename)
 
     if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在するかどうか
             with open(FILE_PATH_JSONDATA + filename, "r") as f:
@@ -131,19 +135,34 @@ def details():
 
                 zi = read_json[key]
 
-                #img_binarystream = io.BytesIO(zi["imageBynary"].encode('utf-8'))
+                #img_binarystream = io.BytesIO(zi["imageBynary"].encode('utf-8'))、
 
                 #PILイメージ <- バイナリーストリーム
                 #img_pil = Image.open(img_binarystream)
+            #keyの日付、画像データ、詳細情報を返す
             return render_template("act.html",a=zi["date"],b=zi["imageBynary"],c=zi["detail"])#,a=read_json[key].date,b=read_json[key].imageBynary,c=read_json[key].detail)
     else:
         print("error:ファイルが存在しません")
     return None
 
 #TODO 一覧表示
-@app.route('/list')
+@app.route('/list', methods=['GET'])
 def list():
-    return None
+    filelist = os.listdir(FILE_PATH_JSONDATA)
+    return render_template('test.html',filelist=filelist)
+
+#TODO 画像一覧表示
+@app.route('/imagelist',methods=['GET'])
+def imageList():
+    filename = request.query_string.decode()    #リクエストデータをbyte型→文字列変換
+
+    #クエリストリングはファイル名なのでそのファイルを開き、jsonリスト形式にして返したい。結果的にはhtml側でjsonforで回してURLを生成しつつ、まぁwindowsのピクチャ表示みたいな感じにしたいかなーって思ってる作れるかは知らん。。
+    with open(FILE_PATH_JSONDATA + filename, "r") as f:
+        read_json = json.load(f)
+        print(read_json)
+
+    return render_template('test2.html',read_json=read_json)
+
 
 def predict(data):
     """
