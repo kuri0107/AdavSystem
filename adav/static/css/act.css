@@ -1,5 +1,6 @@
 body {
-    background-image: url("/static/images/background-2.jpg");
+    background-color: black;
+    font-family:'ＭＳ 明朝',和文フォント;
 }
 
 h1{
@@ -10,8 +11,8 @@ h1{
 }
 
 img{
-    width: 800px;
-    height: 600px;
+    width: 600px;
+    height: 450px;
 }
 
 h2 {
