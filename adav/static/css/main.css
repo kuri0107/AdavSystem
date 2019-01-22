@@ -3,7 +3,7 @@ html, body{
   overflow: hidden;
 }
 body {
-    background-color: black;
+    background-color: #333333;
 	position: fixed;
 	width: 100%;
 	height:100%;
@@ -15,18 +15,81 @@ h1{
 }
 
 /* 右側 */
-div {
+.scroll {
     height:576px;
     overflow-y:scroll;
     margin:10px;
 }
 
-/* リフレッシュボタン */
-button {
-    width:320px;
-}
-
 /* canvasを非表示 */
 canvas {
     display:none;
+}
+
+.top_btn {
+    position: fixed;
+    right: 180px;
+    top: 5px;
+}
+
+.scroll {
+    position: fixed;
+    right: 0px;
+    top: 50px;
+}
+
+#capture_table {
+    width: 400px;
+}
+
+
+.btn {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0 30px;
+    font-size: 19px;
+    height: 40px;
+    line-height: 40px!;
+    vertical-align: middle;
+    background: #51587b;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    transition: .4s;
+}
+
+.btn:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border: none;
+    border-left: solid 21px #333333;
+    border-bottom: solid 41px transparent;
+    z-index: 1;
+    transition: .4s;
+}
+
+.btn:after {
+    position: absolute;
+    content: '';
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border: none;
+    border-left: solid 21px transparent;
+    border-bottom: solid 41px #333333;
+    z-index: 1;
+    transition: .4s;
+}
+
+.btn:hover:before, .deg_btn:hover:after{
+    border-left-width: 25px;
+}
+
+.btn:hover{
+    background: #2c3148;
 }

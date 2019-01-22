@@ -20,7 +20,7 @@
         <!-- <tr><h1>Adavシステム</h1></j1></tr> -->
         <tr>
             <!-- Webカメラの表示 -->
-            <td valign="top">
+            <td valign="top" width="60%">
                 <video id="myVideo" width="800" height="600" autoplay="1" ></video>
             </td>
 
@@ -29,11 +29,15 @@
 
             <!-- TODO 今後のタスク -->
             <!-- TODO 詳細画像をクリックした際に新タブで詳細を表示する -->
-            <td>
-                <div>
-                    <table id="capture_table">
-                        <tr><td><button>画像をリフレッシュ</button></td></tr>
+            <td width="40%">
+                <div class="top_btn">
+                    <table id="btn_table">
+                        <tr><td><a href="#" class="btn">リフレッシュ</a></td></tr>
                         <a href="/list">テスト用ページに飛ぶぜ</a>
+                    </table>
+                </div>
+                <div class="scroll">
+                    <table id="capture_table">
                         <tr><td><canvas id="canvas"></canvas></td></tr>
                     </table>
                 </div>

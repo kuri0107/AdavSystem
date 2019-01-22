@@ -1,5 +1,5 @@
 $(function(){
-    $("button").click(function(){
+    $('.btn').on('click',function(){
         $("tr#capture").remove();
     });
 });
