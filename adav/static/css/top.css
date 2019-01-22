@@ -1,11 +1,16 @@
 body {
-    background-image: url("/static/images/background.jpg");
+    background-image: url("/static/images/background-brain.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    font-family:'ＭＳ 明朝',和文フォント;
 }
 h1 {
-    font-size: 64px;
+    font-size: 100px;
     color: white;
 }
 
-h2{
-    color: white;
+form {
+    position: relative;
+    top: 250px;
 }
