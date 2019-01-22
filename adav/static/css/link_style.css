@@ -1,0 +1,26 @@
+/* リンクテキストの色固定する */
+a:link { color:#2ecc71; text-decoration:none }
+a:visited { color:#2ecc71; text-decoration:none }
+a:hover { color:#2ecc71; text-decoration:none }
+a:active { color:#2ecc71; text-decoration:none }
+
+/* リンクテキストデザイン */
+/* https://www.nxworld.net/tips/15-text-link-hover-effect-and-design.html */
+.astyle {
+  position: relative;
+  display: inline-block;
+  transition: .3s;
+}
+.astyle::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  content: '';
+  width: 0;
+  height: 1px;
+  background-color: #2ecc71;
+  transition: .3s;
+}
+.astyle:hover::after {
+  width: 100%;
+}

@@ -65,7 +65,6 @@ def capture():
         imageBynary = cnvString(getdata)
 
         #TODO 読み込み失敗時の処理
-        #TODO 書き込み失敗時の処理
         #jsonファイルに書き込み
         if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在する場合
             # try:
@@ -145,24 +144,23 @@ def details():
         print("error:ファイルが存在しません")
     return None
 
-#TODO 一覧表示
+#一覧表示
 @app.route('/list', methods=['GET'])
 def list():
     filelist = os.listdir(FILE_PATH_JSONDATA)
-    return render_template('test.html',filelist=filelist)
+    return render_template('filelist.html',filelist=filelist)
 
-#TODO 画像一覧表示
+#画像一覧表示
 @app.route('/imagelist',methods=['GET'])
 def imageList():
     filename = request.query_string.decode()    #リクエストデータをbyte型→文字列変換
 
-    #クエリストリングはファイル名なのでそのファイルを開き、jsonリスト形式にして返したい。結果的にはhtml側でjsonforで回してURLを生成しつつ、まぁwindowsのピクチャ表示みたいな感じにしたいかなーって思ってる作れるかは知らん。。
+    #jsonデータの中身を取り出す
     with open(FILE_PATH_JSONDATA + filename, "r") as f:
         read_json = json.load(f)
         print(read_json)
 
-    return render_template('test2.html',read_json=read_json)
-
+    return render_template('imagelist.html',read_json=read_json)
 
 def predict(data):
     """

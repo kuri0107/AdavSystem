@@ -2,8 +2,13 @@
 html, body{
   overflow: hidden;
 }
+
+html {
+    background: #333333
+}
+
 body {
-    background-color: #333333;
+    background-color: black;
 	position: fixed;
 	width: 100%;
 	height:100%;
