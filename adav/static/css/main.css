@@ -8,7 +8,6 @@ html {
 }
 
 body {
-    background-color: black;
 	position: fixed;
 	width: 100%;
 	height:100%;
@@ -24,6 +23,9 @@ h1{
     height:576px;
     overflow-y:scroll;
     margin:10px;
+    position: fixed;
+    right: 0px;
+    top: 50px;
 }
 
 /* canvasを非表示 */
@@ -31,21 +33,18 @@ canvas {
     display:none;
 }
 
-.top_btn {
+#top_btn {
     position: fixed;
-    right: 180px;
+    right: 170px;
     top: 5px;
 }
 
-.scroll {
-    position: fixed;
-    right: 0px;
-    top: 50px;
-}
 
 #capture_table {
     width: 400px;
 }
+
+
 
 
 .btn {
