@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/hover.css">
+</head>
+<body>
+    {% for i in read_json %}
+    <a href="/act?{{i}}" target="_blank" class="css3gallery"><img src='{{read_json[i]["imageBynary"]}}' width="320" height="240" alt="{{read_json[i]}}"></a>
+    {% endfor %}
+</body>
+</html>

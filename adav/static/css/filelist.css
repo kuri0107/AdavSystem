@@ -1,0 +1,17 @@
+/* https://www.nxworld.net/tips/15-text-link-hover-effect-and-design.html */
+/*a {
+  display: inline-block;
+  transition: .3s;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}
+a:hover {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}*/
+
+html {
+    background: #333333;
+    color: #ffffff;
+    font-size: x-large;
+}

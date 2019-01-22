@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>テスト用ページ</title>
+    <link rel="stylesheet" href="/static/css/filelist.css">
+    <link rel="stylesheet" href="/static/css/link_style.css">
+</head>
+<body>
+    <table>
+        <h1>AdavSystem -ファイル一覧</h1>
+        {% for x in filelist %}
+        <p><a href='/imagelist?{{x}}' class="astyle">{{ x }}</a></p>
+        {% endfor %}
+    </table>
+</body>
+</html>

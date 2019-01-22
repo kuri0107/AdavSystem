@@ -10,6 +10,7 @@
     <title>Adav</title>
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/hover.css">
+    <link rel="stylesheet" href="/static/css/link_style.css">
     <script src="/static/js/jquery-3.3.1.min.js"></script>
     <script src="/static/js/capture.js"></script>
     <script type="text/javascript" src="/static/js/main.js"></script>
@@ -17,11 +18,21 @@
 </head>
 <body>
     <table width="100%">
-        <tr><h1>Adavシステム</h1></j1></tr>
+        <tr>
+            <td><h1 style="color:#FFFFFF;margin:0;padding:0;">AdavSystem</h1></td>
+        </tr>
         <tr>
             <!-- Webカメラの表示 -->
-            <td valign="top">
-                <video id="myVideo" width="800" height="600" autoplay="1" ></video>
+            <td>
+                <!-- 【参考】https://www.keicode.com/script/align-vertical.php -->
+                <!-- 【アイコン】https://material.io/tools/icons/?icon=videocam&style=round -->
+                <p style="color:#FFFFFF;">
+                    <svg style="width:24px;height:24px;vertical-align:middle;fill:#FFFFFF" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l2.29 2.29c.63.63 1.71.18 1.71-.71V8.91c0-.89-1.08-1.34-1.71-.71L17 10.5z"/>
+                    </svg>
+                    Live
+                </p>
+                <video id="myVideo" width="640" height="480" autoplay="1" ></video>
             </td>
 
             <!-- キャプチャした画像を表示 -->
@@ -32,8 +43,8 @@
             <td>
                 <div>
                     <table id="capture_table">
+                        <tr><td><a href="/list" class="astyle">History</a></td></tr>
                         <tr><td><button>画像をリフレッシュ</button></td></tr>
-                        <a href="/list">テスト用ページに飛ぶぜ</a>
                         <tr><td><canvas id="canvas"></canvas></td></tr>
                     </table>
                 </div>
