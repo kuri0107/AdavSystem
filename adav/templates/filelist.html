@@ -10,7 +10,9 @@
     <table>
         <h1>AdavSystem -ファイル一覧</h1>
         {% for x in filelist %}
+        {% if x != 'dummy.txt' %}
         <p><a href='/imagelist?{{x}}' class="astyle">{{ x }}</a></p>
+        {% endif %}
         {% endfor %}
     </table>
 </body>
