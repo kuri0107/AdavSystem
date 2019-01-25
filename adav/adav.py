@@ -4,7 +4,7 @@ from PIL import Image
 from keras.preprocessing import image
 import tensorflow
 import numpy as np
-import json,base64,datetime,io,locale,os
+import json,base64,datetime,io,locale,os,cv2
 app = Flask(__name__)
 
 # ファイルの拡張子の定義
@@ -209,6 +209,51 @@ def createFileName(fileformat):
     :return:ファイル名
     """
     return datetime.datetime.today().strftime("%Y%m%d") + fileformat
+
+
+#引数のtarget_binaryは画像のバイナリだけ
+#引数のfilenameには、最新のjsonファイル
+def hist_matching(target_binary,filename):
+    #比較して80％以上似ていたらTrue
+    #似てないならFalse
+    
+    IMG_SIZE = (200, 200) #画像サイズの指定
+
+    with open(filename, "r") as f:
+        read_json = json.load(f)
+
+    #比較対象の画像をバイナリから画像データにする作業
+    #バイナリデータ <- base64でエンコードされたデータ
+    img_binary = base64.b64decode(target_binary)
+    jpg=np.frombuffer(img_binary,dtype=np.uint8)
+    #raw image <- jpg　
+    target_img = cv2.imdecode(jpg, cv2.IMREAD_COLOR)
+
+    #jsonファイル内の最新の画像をバイナリから画像データに変換する作業
+    key = sorted(read_json.keys())[len(read_json.keys()) - 1] #jsonファイル内の一番最後のKeyを持ってきてる
+    img_base64 = read_json[key]["imageBynary"][HEADER_IDX:] # バイナリのみ抽出
+
+    #バイナリデータ <- base64でエンコードされたデータ
+    img_binary = base64.b64decode(img_base64)
+    jpg=np.frombuffer(img_binary,dtype=np.uint8)
+    #raw image <- jpg　
+    comparing_img = cv2.imdecode(jpg, cv2.IMREAD_COLOR)
+
+    #ここから比較する作業
+    target_img = cv2.resize(target_img, IMG_SIZE)  #比較元画像のサイズを200,200にリサイズする
+    target_hist = cv2.calcHist([target_img], [0], None, [256], [0, 256]) #画像の色相分布行列化
+
+
+    comparing_img = cv2.resize(comparing_img, IMG_SIZE) #比較先画像のサイズを200,200にリサイズする
+    comparing_hist = cv2.calcHist([comparing_img], [0], None, [256], [0, 256]) #画像の色相分布行列化
+
+    ret = cv2.compareHist(target_hist, comparing_hist, 0) #比率をだす
+
+    #80％以上似ていたらTrue 以下ならFalse
+    if ret >= 80:
+        return True
+    return False
+
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8082, debug=True)
