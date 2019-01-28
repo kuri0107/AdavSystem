@@ -5,6 +5,14 @@ from keras.preprocessing import image
 import tensorflow
 import numpy as np
 import json,base64,datetime,io,locale,os
+
+#グラフの描写に必要
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+import urllib.parse         #描写したグラフをエンコードするのに必要
+
+import calendar
+
 app = Flask(__name__)
 
 # ファイルの拡張子の定義
@@ -144,10 +152,11 @@ def details():
         print("error:ファイルが存在しません")
     return None
 
-#一覧表示
+#ファイル一覧表示
 @app.route('/list', methods=['GET'])
 def list():
     filelist = os.listdir(FILE_PATH_JSONDATA)
+    #print(type(filelist))
     return render_template('filelist.html',filelist=filelist)
 
 #画像一覧表示
@@ -161,6 +170,60 @@ def imageList():
         print(read_json)
 
     return render_template('imagelist.html',read_json=read_json)
+
+#TODO 月毎集計
+@app.route('/monthagg',methods=['GET'])
+def monthAgg():
+    #今月→201901のjsonファイルの長さを全て集計
+    #TODO リクエストデータに応じて年を変更する
+    year = datetime.datetime.today().strftime("%Y") #今年を取得
+    year = str(int(year) -1 ) #-1で1年前
+    #print(year)
+    month =[1,2,3,4,5,6,7,8,9,10,11,12]
+    agglist = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+    filelist = os.listdir(FILE_PATH_JSONDATA)
+    for filename in filelist :
+        if filename != "dummy.txt" and filename[0:4] == year:
+            with open(FILE_PATH_JSONDATA + filename, "r") as f:
+                read_json = json.load(f)
+                #print(filename[4:6])    #月の部分 "01"～"12"
+                idx = int(filename[4:6]) - 1  #0～11まで(1月から12月まで)
+                agglist[idx] += len(read_json)   #
+                #print(read_json)
+
+    graph_data = createGraph(month,agglist,year,margin=100,xlabel="MONTH",xmin=0,xmax=12,xmargin=3)  #グラフ生成
+    return render_template('month_agg_show.html',graph_data=graph_data,agglist=agglist,month=month)
+
+#TODO 日毎集計
+@app.route('/dayagg',methods=['GET'])
+def dayAgg():
+    #月の日数に応じてリストを可変
+    year = "2018"
+    month = "06"
+    agglist = []    #日ごとの検出数
+    day =[] #日付を格納する
+    title = year + "/" + month
+    #該当する年月の最終日付を取得する（リストの要素数となる）
+    dummy, lastday = calendar.monthrange(int(year),int(month))
+
+    #初期化
+    for i in range(lastday):
+        agglist.append(0)
+        day.append(i+1)
+
+    filelist = os.listdir(FILE_PATH_JSONDATA)
+    for filename in filelist :
+        if filename != "dummy.txt" and filename[0:4] == year and filename[4:6] == month:
+            with open(FILE_PATH_JSONDATA + filename, "r") as f:
+                read_json = json.load(f)
+                print(filename[6:8])    #月の部分 "01"～"12"
+                idx = int(filename[6:8]) - 1  #0～最終日-1
+                agglist[idx] += len(read_json)   #
+
+    #print(agglist)
+    graph_data = createGraph(day,agglist,title,10,"DAY",1,lastday,7)
+    return render_template('month_agg_show.html',graph_data=graph_data,agglist=agglist,day=day)
 
 def predict(data):
     """
@@ -190,6 +253,74 @@ def predict(data):
             # 正常時・予測不能時
             return False
 
+def createGraph(xlist,ylist,title,margin,xlabel,xmin,xmax,xmargin):
+    """
+    :param xlist: xlist:x軸に使用するList
+    :param ylist: y軸に使用するList
+    :param title: グラフタイトルString
+    :param margin: y軸の余白int
+    :param xlabel: x軸のラベルString
+    :param xmin: x軸の下限値int
+    :param xmax: x軸の上限値int
+    :param xmargin: x軸メモリの余白
+    :return:
+    """
+
+    # 参考URL
+    #【http://kaisk.hatenadiary.com/entry/2014/11/30/163016】
+    #【https://stats.biopapyrus.jp/python/params.html】
+    #【http://python-remrin.hatenadiary.jp/entry/2017/05/27/114816】
+    #【https://pythonmemo.hatenablog.jp/entry/2018/04/22/204614】
+    #【http://d.hatena.ne.jp/y_n_c/20091122/1258842406】
+    #【https://qiita.com/5t111111/items/3d9efdbcc630daf0e48f】
+    #【http://k-kuro.hatenadiary.jp/entry/20180213/p1】
+    #【https://hopita.hatenablog.com/entry/2019/01/03/230121】
+
+    #カラーコードの定義
+    COLOR_WHITE = "#FFFFFF"
+    COLOR_BACKGROUND = "#333333"
+    COLOR_GRID = "#CFCFCF"
+
+    y_margin = max(ylist) - max(ylist) % margin + margin    #y軸の余白を最高値に合わせて取る
+    x = np.array(xlist) #x座標:1月～12月
+    y = np.array(ylist) #y座標:実際の集計数
+
+    fig, ax = plt.subplots()
+
+    plt.tick_params(length=0)   # メモリを消す
+    plt.ylim(ymin=0,ymax=y_margin)  # y軸の範囲を設定
+    plt.xticks(np.arange(xmin, xmax + 1, xmargin))
+    plt.xlabel(xlabel,color=COLOR_WHITE) # x軸ラベル
+    plt.ylabel('DETECTION',color=COLOR_WHITE) # y軸ラベル
+
+    fig.patch.set_facecolor(COLOR_BACKGROUND)  # 図全体の背景色
+    ax.set_title(title,color=COLOR_WHITE) # グラフタイトル
+    ax.plot(x,y, linestyle = '-',marker="D",color="#40AAEF")    # グラフを描写
+    ax.patch.set_facecolor(COLOR_BACKGROUND)  # subplotの背景色
+
+    #グラフの枠線の描写
+    ax.spines["right"].set_color("none")  # 右消し
+    ax.spines["top"].set_color("none")    # 上消し
+    ax.spines["left"].set_color(COLOR_WHITE)   # 左白線
+    ax.spines["bottom"].set_color(COLOR_WHITE) # 下白線
+
+    #グリッドの描写
+    ax.xaxis.grid(True, which = 'major', linestyle = '-', color = COLOR_GRID)
+    ax.yaxis.grid(True, which = 'major', linestyle = '-', color = COLOR_GRID)
+
+    #メモリの数字の色を変更する
+    for item in ax.get_xticklabels():
+        item.set_color(COLOR_WHITE)
+
+    for item in ax.get_yticklabels():
+        item.set_color(COLOR_WHITE)
+
+    canvas = FigureCanvasAgg(fig)
+    buf = io.BytesIO()
+    canvas.print_png(buf)
+    data = buf.getvalue()
+    return urllib.parse.quote(data)
+
 def cnvString(bynary):
     """
     バイナリ型を文字列型に変換
@@ -211,4 +342,4 @@ def createFileName(fileformat):
     return datetime.datetime.today().strftime("%Y%m%d") + fileformat
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8081, debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=True)
