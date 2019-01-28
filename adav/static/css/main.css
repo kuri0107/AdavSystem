@@ -15,8 +15,22 @@ body {
 }
 
 h1{
-    color:white;
+    color:#FFFFFF;
+    margin:0;
+    padding:0;
 }
+
+p {
+    color:#FFFFFF;
+}
+
+svg {
+    width:24px;
+    height:24px;
+    vertical-align:middle;
+    fill:#FFFFFF;
+}
+
 
 /* 右側 */
 .scroll {
@@ -26,6 +40,12 @@ h1{
     position: fixed;
     right: 0px;
     top: 50px;
+}
+
+.link_table {
+    position: fixed;
+    left: 500px;
+    top: 80px;
 }
 
 /* canvasを非表示 */
@@ -52,14 +72,14 @@ canvas {
     display: inline-block;
     text-decoration: none;
     padding: 0 30px;
-    font-size: 19px;
-    height: 40px;
-    line-height: 40px!;
-    vertical-align: middle;
+    height: 32px;
+    line-height: 32px!;
     background: #51587b;
-    font-size: 20px;
+    font-size: 28px;
     color: rgb(255, 255, 255);
     transition: .4s;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .btn:before {

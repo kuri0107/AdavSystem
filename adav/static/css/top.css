@@ -5,6 +5,11 @@ body {
     background-color: black;
     font-family:'ＭＳ 明朝',和文フォント;
 }
+/* ページをスクロールさせない */
+html{
+  overflow: hidden;
+}
+
 h1 {
     font-size: 100px;
     color: white;

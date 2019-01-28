@@ -5,13 +5,232 @@
     <title>テスト用ページ</title>
     <link rel="stylesheet" href="/static/css/filelist.css">
     <link rel="stylesheet" href="/static/css/link_style.css">
+
 </head>
 <body>
-    <table>
-        <h1>AdavSystem -ファイル一覧</h1>
-        {% for x in filelist %}
-        <p><a href='/imagelist?{{x}}' class="astyle">{{ x }}</a></p>
-        {% endfor %}
-    </table>
+<table>
+    <h1>AdavSystem -The history</h1>
+    <ul class="menu">
+        <li class="menu__single">
+            <a href="#" class="init-bottom">年変更</a>
+            <ul class="menu__second-level">
+                <li><a href="/listy" class="astyle">2019</a></li>
+                <li><a href="/listy" class="astyle">2018</a></li>
+                <li><a href="/listy" class="astyle">2017</a></li>
+            </ul>
+        </li>
+    </ul>
+    <div class="tab_wrap">
+        <input id="tab1" type="radio" name="tab_btn" checked>
+        <input id="tab2" type="radio" name="tab_btn">
+        <input id="tab3" type="radio" name="tab_btn">
+        <input id="tab4" type="radio" name="tab_btn">
+        <input id="tab5" type="radio" name="tab_btn">
+        <input id="tab6" type="radio" name="tab_btn">
+        <input id="tab7" type="radio" name="tab_btn">
+        <input id="tab8" type="radio" name="tab_btn">
+        <input id="tab9" type="radio" name="tab_btn">
+        <input id="tab10" type="radio" name="tab_btn">
+        <input id="tab11" type="radio" name="tab_btn">
+        <input id="tab12" type="radio" name="tab_btn">
+
+        <div class="tab_area">
+            <label class="tab1_label" for="tab1">1月</label>
+            <label class="tab2_label" for="tab2">2月</label>
+            <label class="tab3_label" for="tab3">3月</label>
+            <label class="tab4_label" for="tab4">4月</label>
+            <label class="tab5_label" for="tab5">5月</label>
+            <label class="tab6_label" for="tab6">6月</label>
+            <label class="tab7_label" for="tab7">7月</label>
+            <label class="tab8_label" for="tab8">8月</label>
+            <label class="tab9_label" for="tab9">9月</label>
+            <label class="tab10_label" for="tab10">10月</label>
+            <label class="tab11_label" for="tab11">11月</label>
+            <label class="tab12_label" for="tab12">12月</label>
+        </div>
+        <div class="panel_area">
+            <div id="panel1" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[0] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel2" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[1] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel3" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[2] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel4" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[3] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel5" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[4] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel6" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[5] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel7" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[6] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel8" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[7] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel9" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[8] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel10" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[9] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel11" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[10] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+            <div id="panel12" class="tab_panel">
+                {% set count = [0] %}
+                {% for x in filelist[11] %}
+                    {% if count[0] < 11 %}
+                        <p class="day1"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 22 %}
+                        <p class="day2"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% elif count[0] < 33 %}
+                        <p class="day3"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% else %}
+                        <p class="day4"><a href='/imagelist?{{x}}' class="astyle" target='_blank'>{{ x }}</a></p>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                 {% endfor %}
+            </div>
+        </div>
+    </div>
+</table>
 </body>
 </html>

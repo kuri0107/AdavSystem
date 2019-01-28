@@ -13,6 +13,7 @@ import urllib.parse         #描写したグラフをエンコードするのに
 
 import calendar
 
+import json,base64,datetime,io,locale,os,cv2
 app = Flask(__name__)
 
 # ファイルの拡張子の定義
@@ -152,12 +153,44 @@ def details():
         print("error:ファイルが存在しません")
     return None
 
-#ファイル一覧表示
+#一覧表示
 @app.route('/list', methods=['GET'])
 def list():
     filelist = os.listdir(FILE_PATH_JSONDATA)
     #print(type(filelist))
+    fileli = os.listdir(FILE_PATH_JSONDATA)
+    list1 = []
+    list2 = []
+    list3 = []
+    list4 = []
+    list5 = []
+    list6 = []
+    list7 = []
+    list8 = []
+    list9 = []
+    list10 = []
+    list11 = []
+    list12 = []
+    for x in fileli:
+        if x[0:4] == "2019" and x[4:6] == "01": list1.append(x)
+        if x[0:4] == "2019" and x[4:6] == "02": list2.append(x)
+        if x[0:4] == "2019" and x[4:6] == "03": list3.append(x)
+        if x[0:4] == "2019" and x[4:6] == "04": list4.append(x)
+        if x[0:4] == "2019" and x[4:6] == "05": list5.append(x)
+        if x[0:4] == "2019" and x[4:6] == "06": list6.append(x)
+        if x[0:4] == "2019" and x[4:6] == "07": list7.append(x)
+        if x[0:4] == "2019" and x[4:6] == "08": list8.append(x)
+        if x[0:4] == "2019" and x[4:6] == "09": list9.append(x)
+        if x[0:4] == "2019" and x[4:6] == "10": list10.append(x)
+        if x[0:4] == "2019" and x[4:6] == "11": list11.append(x)
+        if x[0:4] == "2019" and x[4:6] == "12": list12.append(x)
+    filelist = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12]
     return render_template('filelist.html',filelist=filelist)
+
+#一覧表示年指定
+@app.route('/listy', methods=['GET'])
+def listy():
+    render_template('filelist.html')
 
 #画像一覧表示
 @app.route('/imagelist',methods=['GET'])
@@ -341,5 +374,50 @@ def createFileName(fileformat):
     """
     return datetime.datetime.today().strftime("%Y%m%d") + fileformat
 
+
+#引数のtarget_binaryは画像のバイナリだけ
+#引数のfilenameには、最新のjsonファイル
+def hist_matching(target_binary,filename):
+    #比較して80％以上似ていたらTrue
+    #似てないならFalse
+
+    IMG_SIZE = (200, 200) #画像サイズの指定
+
+    with open(filename, "r") as f:
+        read_json = json.load(f)
+
+    #比較対象の画像をバイナリから画像データにする作業
+    #バイナリデータ <- base64でエンコードされたデータ
+    img_binary = base64.b64decode(target_binary)
+    jpg=np.frombuffer(img_binary,dtype=np.uint8)
+    #raw image <- jpg　
+    target_img = cv2.imdecode(jpg, cv2.IMREAD_COLOR)
+
+    #jsonファイル内の最新の画像をバイナリから画像データに変換する作業
+    key = sorted(read_json.keys())[len(read_json.keys()) - 1] #jsonファイル内の一番最後のKeyを持ってきてる
+    img_base64 = read_json[key]["imageBynary"][HEADER_IDX:] # バイナリのみ抽出
+
+    #バイナリデータ <- base64でエンコードされたデータ
+    img_binary = base64.b64decode(img_base64)
+    jpg=np.frombuffer(img_binary,dtype=np.uint8)
+    #raw image <- jpg　
+    comparing_img = cv2.imdecode(jpg, cv2.IMREAD_COLOR)
+
+    #ここから比較する作業
+    target_img = cv2.resize(target_img, IMG_SIZE)  #比較元画像のサイズを200,200にリサイズする
+    target_hist = cv2.calcHist([target_img], [0], None, [256], [0, 256]) #画像の色相分布行列化
+
+
+    comparing_img = cv2.resize(comparing_img, IMG_SIZE) #比較先画像のサイズを200,200にリサイズする
+    comparing_hist = cv2.calcHist([comparing_img], [0], None, [256], [0, 256]) #画像の色相分布行列化
+
+    ret = cv2.compareHist(target_hist, comparing_hist, 0) #比率をだす
+
+    #80％以上似ていたらTrue 以下ならFalse
+    if ret >= 80:
+        return True
+    return False
+
+
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='127.0.0.1', port=8081, debug=True)

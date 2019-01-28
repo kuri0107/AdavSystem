@@ -12,6 +12,183 @@ a:hover {
 
 html {
     background: #333333;
-    color: #ffffff;
+    color: #333333;
     font-size: x-large;
+}
+
+h1{
+    color: #fff;
+}
+
+.day2 {
+    position: relative;
+    left: 250px;
+    top: -385px;
+}
+
+.day3 {
+    position: relative;
+    left: 500px;
+    top: -770px;
+}
+
+.day4 {
+    position: relative;
+    left: 750px;
+    top: -1155px;
+}
+
+
+/*タブ用*/
+.tab_wrap{width:1280px; height:300px; margin:80px 0;position: fixed;top: 30px;}
+input[type="radio"]{display:none;}
+.tab_area{font-size:0; margin:0 10px;}
+.tab_area label{width:95px; margin:0 3px; display:inline-block; padding:10px 0; color:#000; background:#cc0c0c; text-align:center; font-size:13px; cursor:pointer; transition:ease 0.2s opacity;}
+.tab_area label:hover{opacity:0.4;}
+.panel_area{background:#cc0c0c;}
+.tab_panel{width:100%; height:400px;padding:5px 0; display:none;}
+.tab_panel p{font-size:14px; letter-spacing:1px; text-align:start;}
+
+#tab1:checked ~ .tab_area .tab1_label{background:#cc0c0c; color:#000;}
+#tab1:checked ~ .panel_area #panel1{display:block;}
+#tab2:checked ~ .tab_area .tab2_label{background:#cc0c0c; color:#000;}
+#tab2:checked ~ .panel_area #panel2{display:block;}
+#tab3:checked ~ .tab_area .tab3_label{background:#cc0c0c; color:#000;}
+#tab3:checked ~ .panel_area #panel3{display:block;}
+#tab4:checked ~ .tab_area .tab4_label{background:#cc0c0c; color:#000;}
+#tab4:checked ~ .panel_area #panel4{display:block;}
+#tab5:checked ~ .tab_area .tab5_label{background:#cc0c0c; color:#000;}
+#tab5:checked ~ .panel_area #panel5{display:block;}
+#tab6:checked ~ .tab_area .tab6_label{background:#cc0c0c; color:#000;}
+#tab6:checked ~ .panel_area #panel6{display:block;}
+#tab7:checked ~ .tab_area .tab7_label{background:#cc0c0c; color:#000;}
+#tab7:checked ~ .panel_area #panel7{display:block;}
+#tab8:checked ~ .tab_area .tab8_label{background:#cc0c0c; color:#000;}
+#tab8:checked ~ .panel_area #panel8{display:block;}
+#tab9:checked ~ .tab_area .tab9_label{background:#cc0c0c; color:#000;}
+#tab9:checked ~ .panel_area #panel9{display:block;}
+#tab10:checked ~ .tab_area .tab10_label{background:#cc0c0c; color:#000;}
+#tab10:checked ~ .panel_area #panel10{display:block;}
+#tab11:checked ~ .tab_area .tab11_label{background:#cc0c0c; color:#000;}
+#tab11:checked ~ .panel_area #panel11{display:block;}
+#tab12:checked ~ .tab_area .tab12_label{background:#cc0c0c; color:#000;}
+#tab12:checked ~ .panel_area #panel12{display:block;}
+
+
+/*プルダウンメニュー用*/
+.menu {
+    position: relative;
+    top: -70px;
+    right: -1100px;
+    width: 50%;
+    height: 50px;
+    max-width: 250px;
+}
+
+.menu > li {
+    width: 100%; /* グローバルナビ4つの場合 */
+    height: 50px;
+    line-height: 30px;
+    background: rgb(29, 33, 19);
+}
+
+.menu > li a {
+    display: block;
+    color: #fff;
+}
+
+.menu > li a:hover {
+    color: #999;
+}
+
+ul.menu__second-level {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1;
+}
+
+ul.menu__third-level {
+    visibility: hidden;
+    opacity: 0;
+}
+
+ul.menu__fourth-level {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.menu > li:hover {
+    background: #072A24;
+    -webkit-transition: all .5s;
+    transition: all .5s;
+}
+
+.menu__second-level li {
+    border-top: 1px solid #111;
+}
+
+.menu__third-level li {
+    border-top: 1px solid #111;
+}
+
+.menu__second-level li a:hover {
+    background: #111;
+}
+
+.menu__third-level li a:hover {
+    background: #2a1f1f;
+}
+
+.menu__fourth-level li a:hover {
+    background: #1d0f0f;
+}
+
+/* 下矢印 */
+.init-bottom:after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin: 0 0 0 15px;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* floatクリア */
+.menu:before,
+.menu:after {
+    content: " ";
+    display: table;
+}
+
+.menu:after {
+    clear: both;
+}
+
+.menu {
+    *zoom: 1;
+}
+
+
+
+.menu > li.menu__single {
+    position: relative;
+}
+
+li.menu__single ul.menu__second-level {
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    background: #072A24;
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+}
+
+li.menu__single:hover ul.menu__second-level {
+    top: 50px;
+    visibility: visible;
+    opacity: 1;
 }
