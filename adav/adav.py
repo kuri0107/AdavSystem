@@ -247,12 +247,12 @@ def dayAgg():
     if(data):
         year = data[0:4]
         month = data[4:6]
-        if(month == "00"):
+        if(int(month) == 0):
             year = str(int(year) - 1)
             month = "12"
-        elif(month == "13"):
+        elif(int(month) >= 13):
             year = str(int(year) + 1)
-            month = "1"
+            month = "01"
     else:
         year = datetime.datetime.today().strftime("%Y") #今年を取得
         month = datetime.datetime.today().strftime("%m") #今月を取得
@@ -261,7 +261,7 @@ def dayAgg():
     agglist = []    #日ごとの検出数
     day =[] #日付を格納する
     title = year + "/" + month
-
+    yearmonth = year + month
     #該当する年月の最終日付を取得する（リストの要素数となる）
     dummy, lastday = calendar.monthrange(int(year),int(month))
 
@@ -281,7 +281,7 @@ def dayAgg():
 
     #print(agglist)
     graph_data = createGraph(day,agglist,title,10,"DAY",1,lastday,7)
-    return render_template('month_agg_show.html',graph_data=graph_data,agglist=agglist,day=day,lastmonth=int(data) - 1,nextmonth=int(data) + 1)
+    return render_template('day_agg_show.html',graph_data=graph_data,agglist=agglist,day=day,last_month=int(yearmonth) - 1,next_month=int(yearmonth) + 1)
 
 def predict(data):
     """
