@@ -4,7 +4,7 @@ from PIL import Image
 from keras.preprocessing import image
 import tensorflow
 import numpy as np
-import json,base64,datetime,io,locale,os
+import json,base64,datetime,io,locale,os,cv2
 
 #グラフの描写に必要
 import matplotlib.pyplot as plt
@@ -13,7 +13,6 @@ import urllib.parse         #描写したグラフをエンコードするのに
 
 import calendar
 
-import json,base64,datetime,io,locale,os,cv2
 app = Flask(__name__)
 
 # ファイルの拡張子の定義
@@ -77,29 +76,32 @@ def capture():
         #jsonファイルに書き込み
         if os.path.isfile(FILE_PATH_JSONDATA + filename):   #jsonファイルが存在する場合
             # try:
-            with open(FILE_PATH_JSONDATA + filename, "r") as f:
-                read_json = json.load(f)
-                print("読み込み成功:")
-                read_json[key] = {
-                    "imageBynary": imageBynary,
-                    "detail" : "詳細データ",
-                    "date" : date
-                }
-            with open(FILE_PATH_JSONDATA + filename, "w") as f:
-                json.dump(read_json,f)
-                print("書き込み完了")
-            # except:
-            # with open(FILE_PATH_JSONDATA+ filename, "w") as f:
-            #     json_data = {
-            #         key:{
-            #             "imageBynary": imageBynary,
-            #             "detail" : "詳細データ",
-            #             "date" : date
-            #         }
-            #     }
-            #     json.dump(json_data,f)
-            # print("ファイルに問題があるため、新規作成します。")
-            # pass
+            if(not hist_matching(cnvString(getdata[HEADER_IDX:]),FILE_PATH_JSONDATA + filename)):   #前回キャプチャした画像と似ていない場合書き込み
+                with open(FILE_PATH_JSONDATA + filename, "r") as f:
+                    read_json = json.load(f)
+                    print("読み込み成功:")
+                    read_json[key] = {
+                        "imageBynary": imageBynary,
+                        "detail" : "詳細データ",
+                        "date" : date
+                    }
+                with open(FILE_PATH_JSONDATA + filename, "w") as f:
+                    json.dump(read_json,f)
+                    print("書き込み完了")
+                # except:
+                # with open(FILE_PATH_JSONDATA+ filename, "w") as f:
+                #     json_data = {
+                #         key:{
+                #             "imageBynary": imageBynary,
+                #             "detail" : "詳細データ",
+                #             "date" : date
+                #         }
+                #     }
+                #     json.dump(json_data,f)
+                # print("ファイルに問題があるため、新規作成します。")
+                # pass
+            else:
+                return Response(None)
 
         else:   #ファイルが存在しない場合新規作成
             with open(FILE_PATH_JSONDATA + filename, "w") as f:
@@ -207,14 +209,19 @@ def imageList():
 #TODO 月毎集計
 @app.route('/monthagg',methods=['GET'])
 def monthAgg():
-    #今月→201901のjsonファイルの長さを全て集計
-    #TODO リクエストデータに応じて年を変更する
-    year = datetime.datetime.today().strftime("%Y") #今年を取得
-    year = str(int(year) -1 ) #-1で1年前
-    #print(year)
+    #リクエストデータに応じて年を変更する
+    data = request.query_string.decode()    #リクエストデータ（年）を取得
+
+    if(data):   #年が取得できた場合
+        year = data
+    else:   #リクエストデータがなかった場合
+        year = datetime.datetime.today().strftime("%Y") #今年を取得
+        year = str(int(year) -1 ) #-1で1年前
+
     month =[1,2,3,4,5,6,7,8,9,10,11,12]
     agglist = [0,0,0,0,0,0,0,0,0,0,0,0]
 
+    #集計
     filelist = os.listdir(FILE_PATH_JSONDATA)
     for filename in filelist :
         if filename != "dummy.txt" and filename[0:4] == year:
@@ -222,21 +229,35 @@ def monthAgg():
                 read_json = json.load(f)
                 #print(filename[4:6])    #月の部分 "01"～"12"
                 idx = int(filename[4:6]) - 1  #0～11まで(1月から12月まで)
-                agglist[idx] += len(read_json)   #
-                #print(read_json)
+                agglist[idx] += len(read_json)   #該当する月の件数を追加
 
     graph_data = createGraph(month,agglist,year,margin=100,xlabel="MONTH",xmin=0,xmax=12,xmargin=3)  #グラフ生成
-    return render_template('month_agg_show.html',graph_data=graph_data,agglist=agglist,month=month)
+    return render_template('month_agg_show.html',graph_data=graph_data,agglist=agglist,month=month,next_year=int(year) + 1,last_year=int(year) - 1)
 
 #TODO 日毎集計
 @app.route('/dayagg',methods=['GET'])
 def dayAgg():
-    #月の日数に応じてリストを可変
-    year = "2018"
-    month = "06"
+    #リクエストデータに応じて年を変更する
+    data = request.query_string.decode() #リクエストデータ(年月)を取得
+
+    if(data):
+        year = data[0:4]
+        month = data[4:6]
+        if(month == "00"):
+            year = str(int(year) - 1)
+            month = "12"
+        elif(month == "13"):
+            year = str(int(year) + 1)
+            month = "1"
+    else:
+        year = datetime.datetime.today().strftime("%Y") #今年を取得
+        month = datetime.datetime.today().strftime("%m") #今月を取得
+        #year = str(int(month) -1 ) #-1で1年前
+
     agglist = []    #日ごとの検出数
     day =[] #日付を格納する
     title = year + "/" + month
+
     #該当する年月の最終日付を取得する（リストの要素数となる）
     dummy, lastday = calendar.monthrange(int(year),int(month))
 
@@ -256,7 +277,7 @@ def dayAgg():
 
     #print(agglist)
     graph_data = createGraph(day,agglist,title,10,"DAY",1,lastday,7)
-    return render_template('month_agg_show.html',graph_data=graph_data,agglist=agglist,day=day)
+    return render_template('month_agg_show.html',graph_data=graph_data,agglist=agglist,day=day,lastmonth=int(data) - 1,nextmonth=int(data) + 1)
 
 def predict(data):
     """
@@ -414,10 +435,11 @@ def hist_matching(target_binary,filename):
     ret = cv2.compareHist(target_hist, comparing_hist, 0) #比率をだす
 
     #80％以上似ていたらTrue 以下ならFalse
-    if ret >= 80:
+    print(ret)
+    if ret >= 0.8:
         return True
     return False
 
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8081, debug=True)
+    app.run(host='127.0.0.1', port=8082, debug=True)

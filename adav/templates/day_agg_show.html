@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/static/css/agg.css">
+    <link rel="stylesheet" href="/static/css/link_style.css">
 </head>
 <body>
-<img src="data:image/png:base64,{{ graph_data }} " style="float:left;"/>
+    <img src="data:image/png:base64,{{ graph_data }} " style="float:left;"/>
+    <table style="float:right">
+        <tr>
+            <th><font color="#FFFFFF">月</font></th>
+            <th><font color="#FFFFFF">検知数</font></th>
+        </tr>
+
+        <!-- 【https://qiita.com/takahirono7/items/48c2578271f523f60cb1】 -->
+        {% for d in day %}{% set month_loop = loop %}
+        {# loop.index で、インデックスを取得し、A_listとB_listのindexが同一の際はfor文で結果を出力する #}
+        {% for agg in agglist %}{% if loop.index==month_loop.index %}
+        <tr>
+            <td><font color="#FFFFFF">{{d}}</font></td>
+            <td><font color="#FFFFFF">{{agg}}</font></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </table>
+    <a href="/monthagg?{{last_month}}" class="astyle">先月</a>
+    <a href="/monthagg?{{next_month}}" class="astyle">来月</a>
 </body>
 </html>

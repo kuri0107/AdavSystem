@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/static/css/agg.css">
+    <link rel="stylesheet" href="/static/css/link_style.css">
 </head>
 <body>
     <h1>AdavSystem</h1>
@@ -27,5 +28,7 @@
         {% endfor %}
         {% endfor %}
     </table>
+    <a href="/monthagg?{{last_year}}" class="astyle">去年</a>
+    <a href="/monthagg?{{next_year}}" class="astyle">来年</a>
 </body>
 </html>

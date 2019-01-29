@@ -4,4 +4,4 @@ Jinja2
 tensorflow
 keras
 Pillow
-
+opencv-python
