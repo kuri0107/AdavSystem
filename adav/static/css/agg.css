@@ -13,3 +13,23 @@ h1{
     padding:0;
     font-family:'ＭＳ 明朝',和文フォント;
 }
+
+
+
+img {
+    position: absolute;
+    top: 80px;
+    left: 60px;
+}
+
+.year {
+    position: absolute;
+    top: 75px;
+    left: 570px;
+}
+
+.list {
+    position: absolute;
+    top: 70px;
+    left: 800px;
+}
