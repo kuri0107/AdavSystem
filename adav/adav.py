@@ -180,7 +180,6 @@ def listy():
     year = request.query_string.decode()
     fileli = os.listdir(FILE_PATH_JSONDATA)
     list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12 = [],[],[],[],[],[],[],[],[],[],[],[]
-    print(year[6:])
     for x in fileli:
         if x[0:4] == year[6:] and x[4:6] == "01": list1.append(x)
         if x[0:4] == year[6:] and x[4:6] == "02": list2.append(x)
