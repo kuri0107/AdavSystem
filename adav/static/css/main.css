@@ -44,7 +44,19 @@ svg {
 
 .link_table {
     position: fixed;
+    left: 400px;
+    top: 80px;
+}
+
+.link_table2 {
+    position: fixed;
     left: 500px;
+    top: 80px;
+}
+
+.link_table3 {
+    position: fixed;
+    left: 600px;
     top: 80px;
 }
 

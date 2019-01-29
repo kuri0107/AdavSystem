@@ -18,4 +18,9 @@ h1 {
 form {
     position: relative;
     top: 220px;
+    outline:none;
+}
+
+input {
+    outline: none;
 }

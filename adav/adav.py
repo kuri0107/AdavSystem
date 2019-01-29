@@ -158,21 +158,8 @@ def details():
 #一覧表示
 @app.route('/list', methods=['GET'])
 def list():
-    filelist = os.listdir(FILE_PATH_JSONDATA)
-    #print(type(filelist))
     fileli = os.listdir(FILE_PATH_JSONDATA)
-    list1 = []
-    list2 = []
-    list3 = []
-    list4 = []
-    list5 = []
-    list6 = []
-    list7 = []
-    list8 = []
-    list9 = []
-    list10 = []
-    list11 = []
-    list12 = []
+    list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12 = [],[],[],[],[],[],[],[],[],[],[],[]
     for x in fileli:
         if x[0:4] == "2019" and x[4:6] == "01": list1.append(x)
         if x[0:4] == "2019" and x[4:6] == "02": list2.append(x)
@@ -192,7 +179,24 @@ def list():
 #一覧表示年指定
 @app.route('/listy', methods=['GET'])
 def listy():
-    render_template('filelist.html')
+    year = request.query_string.decode()
+    fileli = os.listdir(FILE_PATH_JSONDATA)
+    list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12 = [],[],[],[],[],[],[],[],[],[],[],[]
+    for x in fileli:
+        if x[0:4] == year[6:] and x[4:6] == "01": list1.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "02": list2.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "03": list3.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "04": list4.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "05": list5.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "06": list6.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "07": list7.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "08": list8.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "09": list9.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "10": list10.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "11": list11.append(x)
+        if x[0:4] == year[6:] and x[4:6] == "12": list12.append(x)
+    filelist = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12]
+    return render_template('filelist.html',filelist=filelist)
 
 #画像一覧表示
 @app.route('/imagelist',methods=['GET'])
