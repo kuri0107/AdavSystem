@@ -1,0 +1,40 @@
+html {
+    background: #000000;
+    color: #ff0000;
+}
+
+#target1 {
+    position: absolute;
+    top: 0px;
+    left: 200px;
+    font-size: 200px;
+}
+
+#target2 {
+    position: absolute;
+    top: 0px;
+    left: 600px;
+    font-size: 200px;
+}
+
+#target3 {
+    position: absolute;
+    top: 0px;
+    left: 1000px;
+    font-size: 200px;
+}
+
+#target4 {
+    color: #ffffff;
+    position: absolute;
+    top: 400px;
+    left: 400px;
+    font-size: 80px;
+}
+
+#target5 {
+    position: absolute;
+    top: 150px;
+    left: 520px;
+    z-index: 2;
+}
