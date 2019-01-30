@@ -2,31 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Adav</title>
     <link rel="stylesheet" href="/static/css/agg.css">
     <link rel="stylesheet" href="/static/css/link_style.css">
 </head>
 <body>
+    <h1>AdavSystem</h1>
     <img src="data:image/png:base64,{{ graph_data }} " style="float:left;"/>
-    <table style="float:right">
+    <table style="float:right" class="list">
         <tr>
-            <th><font color="#FFFFFF">月</font></th>
-            <th><font color="#FFFFFF">検知数</font></th>
+            <th><font color="#FFFFFF">日</font></th>
+            <th><font color="#FFFFFF">検知数　　　　　　　日　検知数　　　　　</font></th>
         </tr>
 
         <!-- 【https://qiita.com/takahirono7/items/48c2578271f523f60cb1】 -->
-        {% for d in day %}{% set month_loop = loop %}
-        {# loop.index で、インデックスを取得し、A_listとB_listのindexが同一の際はfor文で結果を出力する #}
-        {% for agg in agglist %}{% if loop.index==month_loop.index %}
-        <tr>
-            <td><font color="#FFFFFF">{{d}}</font></td>
-            <td><font color="#FFFFFF">{{agg}}</font></td>
-        </tr>
-        {% endif %}
-        {% endfor %}
+        {% set count = [0] %}
+        {% for d in day %}
+            {% set month_loop = loop %}
+            {# loop.index で、インデックスを取得し、A_listとB_listのindexが同一の際はfor文で結果を出力する #}
+            {% for agg in agglist %}
+                {% if loop.index==month_loop.index %}
+                    {% if count[0] < 16 %}
+                        <tr>
+                            <td><font color="#FFFFFF">{{d}}日　</font></td>
+                            <td><font color="#FFFFFF">{{agg}}</font></td>
+                        </tr>
+                    {% elif count[0] == 16 %}
+                        </table>
+                        <table class="list2">
+                            <tr>
+                                <td><font color="#FFFFFF">{{d}}日　</font></td>
+                                <td><font color="#FFFFFF">{{agg}}</font></td>
+                            </tr>
+                    {% elif count[0] >16 %}
+                        <tr>
+                            <td><font color="#FFFFFF">{{d}}日　</font></td>
+                            <td><font color="#FFFFFF">{{agg}}</font></td>
+                        </tr>
+                    {% endif %}
+                    {% if count.append(count.pop() + 1) %}{% endif %}
+                {% endif %}
+            {% endfor %}
         {% endfor %}
     </table>
-    <a href="/dayagg?{{last_month}}" class="astyle">先月</a>
-    <a href="/dayagg?{{next_month}}" class="astyle">来月</a>
+    <div class="year">
+        <a href="/dayagg?{{last_month}}" class="astyle">先月</a>
+        <a href="/dayagg?{{next_month}}" class="astyle">来月</a>
+    </div>
 </body>
 </html>

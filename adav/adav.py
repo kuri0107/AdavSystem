@@ -198,6 +198,10 @@ def listy():
     filelist = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12]
     return render_template('filelist.html',filelist=filelist)
 
+@app.route('/devil', methods=['GET'])
+def devil():
+    return render_template('devil.html')
+
 #画像一覧表示
 @app.route('/imagelist',methods=['GET'])
 def imageList():
@@ -446,4 +450,4 @@ def hist_matching(target_binary,filename):
 
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8086, debug=True)
+    app.run(host='127.0.0.1', port=8087, debug=True)

@@ -13,7 +13,7 @@
     <table style="float:right" class="list">
         <tr>
             <th><font color="#FFFFFF">月</font></th>
-            <th><font color="#FFFFFF">検知数</font></th>
+            <th><font color="#FFFFFF">検知数　　　</font></th>
         </tr>
 
         <!-- 【https://qiita.com/takahirono7/items/48c2578271f523f60cb1】 -->
@@ -23,7 +23,7 @@
             {% for agg in agglist %}
                 {% if loop.index==month_loop.index %}
                     <tr>
-                        <td><font color="#FFFFFF">{{m}}</font></td>
+                        <td><font color="#FFFFFF">{{m}}年　</font></td>
                         <td><font color="#FFFFFF">{{agg}}</font></td>
                     </tr>
                 {% endif %}
