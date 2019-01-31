@@ -311,7 +311,6 @@ def predict(data):
         x = np.expand_dims(x, axis=0)
         # 予測させる
         features = down_model.predict(x)
-        print(features)
         if features[0,0] == 1:
             ret += "倒れている人を検出しました。<br>"
 
@@ -327,7 +326,6 @@ def predict(data):
             x = np.expand_dims(x, axis=0)
         # 予測させる
         features = blade_model.predict(x)
-        print(features)
         if features[0,0] == 1:
             ret += "凶器を検出しました。<br>"
     return ret
