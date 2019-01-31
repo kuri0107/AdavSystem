@@ -32,7 +32,7 @@ FILE_PATH_JSONDATA = "static/jsondata/"
 # モデル準備
 graph = tensorflow.get_default_graph()
 down_model = models.load_model("model/down_predict.hdf5")
-#blade_model = models.load_model("model/blade_predict.hdf5")
+blade_model = models.load_model("model/blade_predict.hdf5")
 
 #日付を日本語で入れるのに必要
 locale.setlocale(locale.LC_ALL, '')
@@ -53,7 +53,8 @@ def capture():
     # 画像データのリクエスト
     getdata = request.data
 
-    if predict(getdata):    # 異常アリ
+    message = predict(getdata)
+    if message:    # 異常アリ
         #ファイル名を設定
         #filename = createFileName(FILE_FORMAT_JPEG) #JPEGで保存
         #filename = createFileName(FILE_FORMAT_PNG) #PNGで保存
@@ -82,7 +83,7 @@ def capture():
                     print("読み込み成功:")
                     read_json[key] = {
                         "imageBynary": imageBynary,
-                        "detail" : "詳細データ",
+                        "detail" : message,
                         "date" : date
                     }
                 with open(FILE_PATH_JSONDATA + filename, "w") as f:
@@ -108,7 +109,7 @@ def capture():
                 json_data = {
                     key:{
                         "imageBynary": imageBynary,
-                        "detail" : "詳細データ",
+                        "detail" : message,
                         "date" : date
                     }
                 }
@@ -290,30 +291,46 @@ def dayAgg():
 def predict(data):
     """
     データの異常有無を予測する。
-    異常がある場合 True ,無い場合 False を返す
+    異常がある場合 対応したメッセージ を,無い場合 空文字列 を返す
     """
+    ret = ""
     global graph
     with graph.as_default():
         # 画像整形種別の定義
         convert_type = {3:"RGB",4:"RGBA"}
 
         # 姿勢判定用モデルの入力形式取得
-        down_input_form = down_model.get_layer(index=0).get_config()["batch_input_shape"]
+        down_input_form = down_model.get_layer(index=0).get_config()["batch_input_shape"][:0:-1]
         # 画像を整形する
         img_buf = io.BytesIO(base64.decodestring(data[HEADER_IDX:]))
         img = Image.open(img_buf)
-        img = img.convert(convert_type[down_input_form[3]])
-        img = img.resize(down_input_form[1:3])
+        img = img.convert(convert_type[down_input_form[0]])
+        img = img.resize(down_input_form[1:])
         # 画像をnumpy配列にする
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
         # 予測させる
         features = down_model.predict(x)
+        print(features)
         if features[0,0] == 1:
-            return True
-        else:
-            # 正常時・予測不能時
-            return False
+            ret += "倒れている人を検出しました。<br>"
+
+        # 凶器判定用モデルの入力形式取得
+        blade_input_form = blade_model.get_layer(index=0).get_config()["batch_input_shape"][:0:-1]
+        # 入力形式が異なる場合画像再整形
+        if down_input_form != blade_input_form:
+            img_buf = io.BytesIO(base64.decodestring(data[HEADER_IDX:]))
+            img = Image.open(img_buf)
+            img = img.convert(convert_type[blade_input_form[0]])
+            img = img.resize(blade_input_form[1:])
+            x = image.img_to_array(img)
+            x = np.expand_dims(x, axis=0)
+        # 予測させる
+        features = blade_model.predict(x)
+        print(features)
+        if features[0,0] == 1:
+            ret += "凶器を検出しました。<br>"
+    return ret
 
 def createGraph(xlist,ylist,title,margin,xlabel,xmin,xmax,xmargin):
     """
